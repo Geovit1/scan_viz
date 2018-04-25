@@ -1,0 +1,8 @@
+/devel
+/devel_isolated
+/el
+/el_isolated
+/build
+.*
+/.*
+!.gitignore
