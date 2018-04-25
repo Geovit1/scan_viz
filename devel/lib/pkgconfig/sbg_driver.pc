@@ -1,8 +1,0 @@
-prefix=/home/zf/scan_viz/devel
-
-Name: sbg_driver
-Description: Description of sbg_driver
-Version: 1.1.6
-Cflags: -I/home/zf/scan_viz/devel/include -I/home/zf/scan_viz/src/sbg_driver/src
-Libs: -L/home/zf/scan_viz/devel/lib 
-Requires: 
