@@ -117,6 +117,12 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/zf/scan_viz/build/gtest/cmake_install.cmake")
+  include("/home/zf/scan_viz/build/nmea_msgs/cmake_install.cmake")
+  include("/home/zf/scan_viz/build/velodyne_msgs/cmake_install.cmake")
+  include("/home/zf/scan_viz/build/sbg_driver/cmake_install.cmake")
+  include("/home/zf/scan_viz/build/velodyne_driver/cmake_install.cmake")
+  include("/home/zf/scan_viz/build/velodyne_laserscan/cmake_install.cmake")
+  include("/home/zf/scan_viz/build/velodyne_pointcloud/cmake_install.cmake")
 
 endif()
 
