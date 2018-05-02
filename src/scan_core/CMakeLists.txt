@@ -22,9 +22,9 @@ find_package(catkin REQUIRED COMPONENTS
 
 find_package(OpenCV REQUIRED)
 #find_package(Boost 
-  #REQUIRED COMPONENTS 
- # thread
-#  )
+#REQUIRED COMPONENTS 
+#thread
+#)
 find_package(Boost REQUIRED)
 
 ################################################
@@ -32,16 +32,15 @@ find_package(Boost REQUIRED)
 ################################################
 
 
-
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
 ################################################
 
 
-
 ###################################
 ## catkin specific configuration ##
 ###################################
+
 
 catkin_package(
 #  INCLUDE_DIRS include
@@ -100,7 +99,7 @@ add_executable(retina
 target_link_libraries(retina godeye_retina data_rider
   ${catkin_LIBRARIES}
 )
-#######################################
+#########################################
 
 #############
 ## Install ##

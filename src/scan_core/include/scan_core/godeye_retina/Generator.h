@@ -1,4 +1,5 @@
 #pragma once
+
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
@@ -26,12 +27,16 @@ namespace godeye_retina
     };
     
 
-    class GeneratorFinalData
+    class GeneratorFinalData:Generator
     {
     public:
+        GeneratorFinalData();
+        ~GeneratorFinalData();
         virtual void NextData();
     protected:
     private:
         drider::fd::Finaldata csvdata;
+        unsigned int bundle_size = 10000;
     };
+
 }

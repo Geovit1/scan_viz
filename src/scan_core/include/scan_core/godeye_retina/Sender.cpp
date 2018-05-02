@@ -22,7 +22,6 @@ namespace godeye_retina
 
         m_msg.poses.push_back(m_ps);
 
-
         m_current_time = ros::Time::now();
         m_last_time = ros::Time::now();
     }
@@ -41,8 +40,6 @@ namespace godeye_retina
         double delta_x = (vx * cos(yaw) - vy * sin(yaw)) * dt;
         double delta_y = (vx * sin(yaw) + vy * cos(yaw)) * dt;
         double delta_th = vth * dt;*/
-
-        
         //yaw += 0.1;//delta_th;
 
         //since all odometry is 6DOF we'll need a quaternion created from yaw
