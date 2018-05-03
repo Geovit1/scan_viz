@@ -2,32 +2,28 @@
 
 namespace godeye_retina
 {
-    Sender::Sender()
+    Sender::Sender(ros::NodeHandle &n)
     {
-        ros::NodeHandle n;
         odom_pub = n.advertise<nav_msgs::Odometry>("odom", 50);
-        way_pub = n.advertise<nav_msgs::Odometry>("way", 50);
+        way_pub = n.advertise<nav_msgs::Path>("way", 50);
         pointcloud_pub = n.advertise<pcl::PointCloud<pcl::PointXYZRGB>>("point_cloud", 40);
-
-        m_msg.header.frame_id = "odom";
-
-        m_ps.header.frame_id = "base_link";
-        m_ps.pose.position.x = 0;
-        m_ps.pose.position.y = 0;
-        m_ps.pose.position.z = 1;
-        m_ps.pose.orientation.x = 0;
-        m_ps.pose.orientation.y = 0;
-        m_ps.pose.orientation.z = 0;
-        m_ps.pose.orientation.w = 1;
-
-        m_msg.poses.push_back(m_ps);
 
         m_current_time = ros::Time::now();
         m_last_time = ros::Time::now();
     }
 
-    void Sender::PublishBundle(pcl::PointCloud<pcl::PointXYZRGB> cloud,
-                            ublas::vector<double> pos_xyz, ublas::vector<double> rpy)
+    void Sender::GetNextBundle(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                            ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy)
+    {
+        if(generator != nullptr)
+        {
+            generator->NextData(cloud, pos_xyz, rpy);
+            std::cout<<"Sender::GetNextBundle"<<std::endl;
+        }
+    }
+
+    void Sender::PublishBundle(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                            ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy)
     {
        // ros::spinOnce();               // check for incoming messages
         m_current_time = ros::Time::now();
@@ -36,10 +32,10 @@ namespace godeye_retina
         double vy = -0.1;
         double vth = 0.1;
         //compute odometry in a typical way given the velocities of the robot
-        /*double dt = (current_time - last_time).toSec();
-        double delta_x = (vx * cos(yaw) - vy * sin(yaw)) * dt;
-        double delta_y = (vx * sin(yaw) + vy * cos(yaw)) * dt;
-        double delta_th = vth * dt;*/
+        double dt = (m_current_time - m_last_time).toSec();
+        double delta_x = (vx * cos(rpy[2]) - vy * sin(rpy[2])) * dt;
+        double delta_y = (vx * sin(rpy[2]) + vy * cos(rpy[2])) * dt;
+        double delta_th = vth * dt;
         //yaw += 0.1;//delta_th;
 
         //since all odometry is 6DOF we'll need a quaternion created from yaw
@@ -56,15 +52,22 @@ namespace godeye_retina
         odom_trans.transform.translation.z = pos_xyz[2];
         odom_trans.transform.rotation = odom_quat;
 
-        m_ps.header.frame_id = "base_link";
-        m_ps.pose.position.x = pos_xyz[0];
-        m_ps.pose.position.y = pos_xyz[1];
-        m_ps.pose.position.z = pos_xyz[2];
-        m_ps.pose.orientation = odom_quat;
 
-        m_msg.poses.push_back(m_ps);
+        nav_msgs::Path msg;
+        msg.header.frame_id = "odom";
+        geometry_msgs::PoseStamped ps;
+        ps.header.frame_id = "base_link";
 
-        way_pub.publish(m_msg);
+        ps.header.frame_id = "base_link";
+        ps.pose.position.x = pos_xyz[0];
+        ps.pose.position.y = pos_xyz[1];
+        ps.pose.position.z = pos_xyz[2];
+        ps.pose.orientation = odom_quat;
+
+        msg.poses.push_back(ps);
+
+        std::cout<<"way_pub.publish(m_msg)"<<std::endl;
+        way_pub.publish(msg);
 
         //send the transform
         m_odom_broadcaster.sendTransform(odom_trans);
@@ -87,6 +90,7 @@ namespace godeye_retina
         odom.twist.twist.angular.z = vth;
 
         //publish the message
+        std::cout<<"odom_pub.publish(odom)"<<std::endl;
         odom_pub.publish(odom);
 
         m_last_time = m_current_time;

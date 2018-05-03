@@ -90,14 +90,16 @@ add_library(godeye_retina
 
 target_link_libraries(godeye_retina 
   ${catkin_LIBRARIES}
+  ${Boost_INCLUDE_DIRS}
 )
 
 add_executable(retina 
   src/godeye_retina/retina.cpp
 )
 
-target_link_libraries(retina godeye_retina data_rider
+target_link_libraries(retina godeye_retina data_rider mathmodel
   ${catkin_LIBRARIES}
+  ${Boost_INCLUDE_DIRS}
 )
 #########################################
 
