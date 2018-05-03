@@ -25,19 +25,22 @@ namespace godeye_retina
     class Sender
     {
     public:
-        Sender();
-        virtual ~Sender();
-        
-        void PublishBundle(pcl::PointCloud<pcl::PointXYZRGB> cloud,
-                            ublas::vector<double> pos_xyz, ublas::vector<double> rpy);
+        Sender(ros::NodeHandle &n);
+        virtual ~Sender(){};
+
+        void GetNextBundle(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                            ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy);
+
+        void PublishBundle(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+                            ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy);
+
+        AbstrGenerator *generator = nullptr;
 
         ros::Publisher odom_pub;
         ros::Publisher way_pub;
         ros::Publisher pointcloud_pub;
 
     protected:
-        nav_msgs::Path m_msg;
-        geometry_msgs::PoseStamped m_ps;
         ros::Time m_current_time, m_last_time;
         tf::TransformBroadcaster m_odom_broadcaster;
     };

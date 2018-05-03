@@ -13,7 +13,7 @@ namespace mathmodel
 
 
     ublas::vector<double> GeographicToGeocentric(double lat, double lon,
-                                                 double h, double a, double f)
+                                                 double h, double a, double f)     //lat and lon - radian
     {
         ublas::vector<double> v(3);
 
@@ -25,6 +25,16 @@ namespace mathmodel
         v[0] = p * cos(lon);
         v[1] = p * sin(lon);
         v[2] = (n + h - e2 * n) * sin(lat);
+
+        return v;
+    }
+
+    ublas::vector<double> GeographicToGeocentric(double lat, double lon, double h)     //lat and lon - radian
+    {
+        ublas::vector<double> v(3);
+        double semimajor_axis = 6378137.0;
+        double flattening = 1.0/298.257223563;
+        v = GeographicToGeocentric(lat, lon, h, semimajor_axis, flattening) ;
 
         return v;
     }

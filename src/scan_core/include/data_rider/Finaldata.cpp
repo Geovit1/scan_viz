@@ -76,6 +76,8 @@ namespace drider { namespace fd {
 
         std::string header;
         std::getline(m_file,header);
+
+        std::cout<<"File opened"<<std::endl;
     }
 
     void Finaldata::Close()
@@ -92,8 +94,21 @@ namespace drider { namespace fd {
         std::getline(m_file,header);
     }
 
+    bool Finaldata::isOpen()
+    {
+        if(m_file.is_open())
+        {
+            return true;
+        } else return false;
+    }
+
     std::vector<Finaldata::CsvLine> Finaldata::ReadCsv(int index, int count)
     {
+        if(m_file.eof()){
+            Reopen();
+            std::cout<<"end of file"<<std::endl;
+        }
+
         std::vector<Finaldata::CsvLine>    list;
         if(m_file.is_open())
         {
@@ -102,6 +117,7 @@ namespace drider { namespace fd {
                 if(m_file.eof())
                 {
                     Reopen();
+                    std::cout<<"end of file"<<std::endl;
                     break;
                 }
                 else {
@@ -113,6 +129,23 @@ namespace drider { namespace fd {
         }
         return list;
     }
+
+    Finaldata::CsvLine Finaldata::ReadCsvRaw()
+    {
+        if(m_file.eof())
+        {
+            Reopen();
+        }
+        Finaldata::CsvLine raw;
+        if(m_file.is_open())
+        {
+            std::string line,f;
+            std::getline(m_file,line);
+            raw=ParseCsvString(line);
+        }
+        return raw;
+    }
+
 
     Finaldata::CsvLine Finaldata::ParseCsvString(std::string raw)
     {
