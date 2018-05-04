@@ -63,6 +63,8 @@ include_directories(
 
 ## Add module DATA_RIDER ##############
 add_library(data_rider
+ # include/data_rider/Lines.cpp
+  include/data_rider/AbstrDataCsv.cpp
   include/data_rider/Finaldata.cpp
 )
 
@@ -72,6 +74,7 @@ target_link_libraries(data_rider
 
 ## Add module MATH_MODEL ##############
 add_library(mathmodel
+  include/mathmodel/Interpolation.cpp
   include/mathmodel/CoordinateSystems.cpp
 )
 
@@ -88,7 +91,7 @@ add_library(godeye_retina
   include/scan_core/godeye_retina/Generator.cpp
 )
 
-target_link_libraries(godeye_retina 
+target_link_libraries(godeye_retina data_rider
   ${catkin_LIBRARIES}
   ${Boost_INCLUDE_DIRS}
 )
@@ -97,7 +100,7 @@ add_executable(retina
   src/godeye_retina/retina.cpp
 )
 
-target_link_libraries(retina godeye_retina data_rider mathmodel
+target_link_libraries(retina godeye_retina mathmodel
   ${catkin_LIBRARIES}
   ${Boost_INCLUDE_DIRS}
 )
