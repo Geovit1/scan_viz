@@ -79,7 +79,10 @@ namespace drider { namespace fd {
         void Close();
         void Reopen();
 
-        std::vector<Finaldata::CsvLine> ReadCsv(int index, int count);
+        bool isOpen();
+
+        std::vector<Finaldata::CsvLine> ReadCsv(int index, int raw_count);
+        Finaldata::CsvLine ReadCsvRaw();
 
         Finaldata::CsvLine ParseCsvString(std::string raw);
 

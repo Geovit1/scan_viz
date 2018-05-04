@@ -8,8 +8,8 @@ using namespace boost::numeric;
 
 namespace mathmodel
 {
-    double semimajor_axis = 6378137.0;
-    double flattening = 1.0/298.257223563;
 
+
+    ublas::vector<double> GeographicToGeocentric(double lat, double lon, double h, double a, double f); 
     ublas::vector<double> GeographicToGeocentric(double lan, double lon, double at);
 }
