@@ -3,93 +3,57 @@
 #include <fstream> 
 #include <sstream>
 #include <vector>
+#include "data_rider/Lines.h"
+#include "data_rider/AbstrDataCsv.h"
 
-namespace drider { namespace fd {
 
-    class Finaldata
+namespace drider {
+    
+    template<typename T> class Finaldata: public AbstrDataCsv<T>
     {
-    public:
-        Finaldata(){}
-        Finaldata(std::string filepath);
-        virtual  ~Finaldata();
-
-        enum CsvHeader
-        {
-            LERP_LASER_TIME,
-            LASER_ID,
-            POINT_X,
-            POINT_Y,
-            POINT_Z,
-            DISTANCE,
-            INTENSITY,
-            ROLL,
-            PITCH,
-            YAW,
-            N,
-            E,
-            D,
-            LATITUDE,
-            LONGITUDE,
-            ATTITUDE
-        };
-
-        struct CsvLine
-        {
-            uint laser_time;
-            char laser_id;
+        public:
             
-            float x;
-            float y;
-            float z;
-            
-            float distance;
-            char intencity;
-
-            float roll;
-            float pitch;
-            float yaw;
-
-            double north;
-            double east;
-            double down;
-
-            double latitude;
-            double longitude;
-            double attitude;
-
-            void setLaserTime(std::string val);
-            void setLaserId(std::string val);
-            void setX(std::string val);
-            void setY(std::string val);
-            void setZ(std::string val);
-            void setDistance(std::string val);
-            void setIntensity(std::string val);
-            void setRoll(std::string val);
-            void setPitch(std::string val);
-            void setYaw(std::string val);
-            void setNorth(std::string val);
-            void setEast(std::string val);
-            void setDown(std::string val);
-            void setLatitude(std::string val);
-            void setLongitude(std::string val);
-            void setAttitude(std::string val);
-        };
-
-        void Open(std::string filepath);
-        void Close();
-        void Reopen();
-
-        bool isOpen();
-
-        std::vector<Finaldata::CsvLine> ReadCsv(int index, int raw_count);
-        Finaldata::CsvLine ReadCsvRaw();
-
-        Finaldata::CsvLine ParseCsvString(std::string raw);
-
-    private:
-        std::string m_filepath;
-        std::ifstream m_file;
-        unsigned long int currnet_file_pos;
+            virtual T ParseCsvString(std::string raw);
     };
 
-}}
+
+    template<> class Finaldata<FinalDataLine> : public AbstrDataCsv<FinalDataLine>
+    {
+        public:
+            Finaldata(): AbstrDataCsv<FinalDataLine>() {}
+            Finaldata(std::string filepath);
+            virtual  ~Finaldata();
+
+            enum CsvHeader
+            {
+                LERP_LASER_TIME,
+                LASER_ID,
+                POINT_X,
+                POINT_Y,
+                POINT_Z,
+                DISTANCE,
+                INTENSITY,
+                ROLL,
+                PITCH,
+                YAW,
+                N,
+                E,
+                D,
+                LATITUDE,
+                LONGITUDE,
+                ATTITUDE
+            };
+
+
+            //virtual std::vector<FinalDataLine> ReadCsv(int index, int raw_count);
+            //virtual FinalDataLine ReadCsvRaw();
+
+            virtual FinalDataLine ParseCsvString(std::string raw);
+
+        private:
+            //unsigned long int currnet_file_pos;
+    };
+
+    
+
+}

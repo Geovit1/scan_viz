@@ -3,9 +3,9 @@
 #include <visualization_msgs/MarkerArray.h>
 #include <tf/tf.h>
 #include "scan_core/godeye_retina/Manager.h"
-#include "data_rider/Finaldata.h"
+//#include "data_rider/Finaldata.h"
 
-using namespace drider::fd;
+using namespace drider;
 
 using namespace godeye_retina;
 

@@ -21,7 +21,7 @@
 #include "mathmodel/CoordinateSystems.h"
 
 using namespace boost::numeric;
-using namespace drider::fd;
+using namespace drider;
 
 namespace godeye_retina
 {
@@ -48,7 +48,7 @@ namespace godeye_retina
 
     protected:
     private:
-        drider::fd::Finaldata m_csvdata;
+        drider::Finaldata<FinalDataLine> m_csvdata;
         unsigned int m_bundle_size = 10000;
 
         ublas::vector<double> m_start_offset_xyz = ublas::vector<double>(3);

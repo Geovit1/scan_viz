@@ -1,0 +1,117 @@
+<?xml version="1.0" ?>
+<robot name="scan_viz">
+
+  <material name="blue">
+    <color rgba="0 0 0.8 1"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+
+  <!-- Global center of coordinates -->
+  <link name = "world" />
+
+  <!-- Transform from global center to odometry center -->
+  <joint name="world_to_odom" type="fixed">
+    <parent link="world"/>
+    <child link="odom"/>
+    <origin xyz="0 0 2"/>
+  </joint> 
+
+  <!-- odometry center of coordinates -->
+  <link name="odom"/>
+
+  <!-- odometry to sbg_link transform -->
+  <joint name="odom_to_base" type="fixed">
+    <parent link="odom"/>
+    <child link="base_link"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+
+    <!-- base link -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="0.5 0.5 0.02"/>
+      </geometry>
+      <material name="red">
+        <color rgba="0 0 1 1"/>
+      </material>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+    </visual>
+  </link>
+
+   <!-- odometry to base_link transform -->
+  <joint name="base_to_sbg" type="fixed">
+    <parent link="base_link"/>
+    <child link="sbg_link"/>
+    <origin rpy="0 ${pi} 0" xyz="0 0 0"/>
+  </joint>
+
+  <!-- sbg link -->
+  <link name="sbg_link">
+    <visual>
+      <geometry>
+        <box size="0.08 0.06 0.0315"/>
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+      <origin rpy="0 0 0" xyz="-0.00155 -0.01595 0.0065"/>
+    </visual>
+  </link>
+
+  <!-- velo32 link -->
+  <link name="velo32">
+    <visual>
+      <geometry>
+         <cylinder length="0.1442" radius="0.04265"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 ${0.1442/2-0.090805}"/>
+      <material name="grey">
+        <color rgba="0.5 0.5 0.5 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <!-- joint between sbg and velo32 -->
+  <joint name="velo32" type="fixed">
+    <parent link="sbg_link"/>
+    <child link="velo32"/>
+    <origin rpy="0 ${pi+pi/4} 0" xyz="-0.2 -0.2 -0.5"/>
+  </joint>
+
+  <!-- zf link -->
+  <link name="zf">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="zf" type="fixed">
+    <parent link="sbg_link"/>
+    <child link="zf"/>
+    <origin rpy="0 ${pi/4} 0" xyz="-0.2 0.2 -0.3"/>
+  </joint>
+
+  <!-- ladybug link -->
+  <link name="ladybug">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.05"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0.0"/>
+      <material name="white"/>
+    </visual>
+  </link>
+  <joint name="ladybug" type="fixed">
+    <parent link="sbg_link"/>
+    <child link="ladybug"/>
+    <origin rpy="0 0 0"  xyz="0 0 -0.5"/>
+  </joint>
+
+</robot>

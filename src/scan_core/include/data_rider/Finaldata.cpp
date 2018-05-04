@@ -1,57 +1,8 @@
 #include "data_rider/Finaldata.h"
 
-namespace drider { namespace fd {
-
-    void Finaldata::CsvLine::setLaserTime(std::string val){
-        laser_time = std::stoul(val);
-    }
-    void Finaldata::CsvLine::setLaserId(std::string val){
-        laser_id = std::stoi(val);
-    }
-    void Finaldata::CsvLine::setX(std::string val){
-        x = std::stof(val);
-    }
-    void Finaldata::CsvLine::setY(std::string val){
-        y = std::stof(val);
-    }
-    void Finaldata::CsvLine::setZ(std::string val){
-        z = std::stof(val);
-    }
-    void Finaldata::CsvLine::setDistance(std::string val){
-        distance = std::stof(val);
-    }
-    void Finaldata::CsvLine::setIntensity(std::string val){
-        intencity = std::stoi(val);
-    }
-    void Finaldata::CsvLine::setRoll(std::string val){
-        roll = std::stof(val);
-    }
-    void Finaldata::CsvLine::setPitch(std::string val){
-        pitch = std::stof(val);
-    }
-    void Finaldata::CsvLine::setYaw(std::string val){
-        yaw = std::stof(val);
-    }
-    void Finaldata::CsvLine::setNorth(std::string val){
-        north = std::stod(val);
-    }
-    void Finaldata::CsvLine::setEast(std::string val){
-        east = std::stod(val);
-    }
-    void Finaldata::CsvLine::setDown(std::string val){
-        down = std::stod(val);
-    }
-    void Finaldata::CsvLine::setLatitude(std::string val){
-        latitude = std::stod(val);
-    }
-    void Finaldata::CsvLine::setLongitude(std::string val){
-        longitude = std::stod(val);
-    }
-    void Finaldata::CsvLine::setAttitude(std::string val){
-        attitude = std::stod(val);
-    }
-
-    Finaldata::Finaldata(std::string filepath)
+namespace drider {
+  
+    Finaldata<FinalDataLine>::Finaldata(std::string filepath): AbstrDataCsv<FinalDataLine>()
     {
         m_filepath = filepath;
         m_file.open(m_filepath);
@@ -60,96 +11,14 @@ namespace drider { namespace fd {
         std::getline(m_file,header);
     }
 
-    Finaldata::~Finaldata()
+    Finaldata<FinalDataLine>::~Finaldata()
     {
         m_file.close();
     }
 
-    void Finaldata::Open(std::string filepath)
+    FinalDataLine Finaldata<FinalDataLine>::ParseCsvString(std::string raw)
     {
-        m_filepath = filepath;
-        if(m_file.is_open())
-        {
-            m_file.close();
-        }
-        m_file.open(m_filepath);
-
-        std::string header;
-        std::getline(m_file,header);
-
-        std::cout<<"File opened"<<std::endl;
-    }
-
-    void Finaldata::Close()
-    {
-        m_file.close();
-    }
-
-    void Finaldata::Reopen()
-    {
-        m_file.close();
-        m_file.open(m_filepath);
-
-        std::string header;
-        std::getline(m_file,header);
-    }
-
-    bool Finaldata::isOpen()
-    {
-        if(m_file.is_open())
-        {
-            return true;
-        } else return false;
-    }
-
-    std::vector<Finaldata::CsvLine> Finaldata::ReadCsv(int index, int count)
-    {
-        if(m_file.eof()){
-            Reopen();
-            std::cout<<"end of file"<<std::endl;
-        }
-
-        std::vector<Finaldata::CsvLine>    list;
-        if(m_file.is_open())
-        {
-            for(int i=0; i<count; i++)
-            {
-                if(m_file.eof())
-                {
-                    Reopen();
-                    std::cout<<"end of file"<<std::endl;
-                    break;
-                }
-                else {
-                    std::string line,f;
-                    std::getline(m_file,line);
-                    list.push_back(ParseCsvString(line));
-                }
-            }
-        }
-        return list;
-    }
-
-    Finaldata::CsvLine Finaldata::ReadCsvRaw()
-    {
-        if(m_file.eof())
-        {
-            Reopen();
-        }
-        Finaldata::CsvLine raw;
-        if(m_file.is_open())
-        {
-            std::string line,f;
-            std::getline(m_file,line);
-            raw=ParseCsvString(line);
-        }
-        return raw;
-    }
-
-
-    Finaldata::CsvLine Finaldata::ParseCsvString(std::string raw)
-    {
-        Finaldata::CsvLine data;
+        FinalDataLine data;
 
         std::istringstream ss( raw );
         std::vector <std::string> record;
@@ -165,49 +34,52 @@ namespace drider { namespace fd {
             switch (i)
             {
                 case CsvHeader::LERP_LASER_TIME:
-                    data.setLaserTime(record[i]);
+                    data.laser_time = std::stoul(record[i]);
                     break;
                 case CsvHeader::LASER_ID:
-                    data.setLaserId(record[i]);
+                    data.laser_id = std::stoi(record[i]);
                     break;
                 case CsvHeader::POINT_X:
-                    data.setX(record[i]);
+                    data.x = std::stof(record[i]);
                     break;
                 case CsvHeader::POINT_Y:
-                    data.setY(record[i]);
+                    data.y = std::stof(record[i]);
                     break;
                 case CsvHeader::POINT_Z:
-                    data.setZ(record[i]);
+                    data.z = std::stof(record[i]);
+                    break;
+                case CsvHeader::DISTANCE:
+                    data.distance = std::stof(record[i]);
                     break;
                 case CsvHeader::INTENSITY:
-                    data.setIntensity(record[i]);
+                    data.intencity = std::stoi(record[i]);
                     break;
                 case CsvHeader::ROLL:
-                    data.setRoll(record[i]);
+                    data.roll = std::stof(record[i]);
                     break;
                 case CsvHeader::PITCH:
-                    data.setPitch(record[i]);
+                    data.pitch = std::stof(record[i]);
                     break;
                 case CsvHeader::YAW:
-                    data.setYaw(record[i]);
+                    data.yaw = std::stof(record[i]);
                     break;
                 case CsvHeader::N:
-                    data.setNorth(record[i]);
+                    data.north = std::stod(record[i]);
                     break;
                 case CsvHeader::E:
-                    data.setEast(record[i]);
+                    data.east = std::stod(record[i]);
                     break;
                 case CsvHeader::D:
-                    data.setDown(record[i]);
+                    data.down = std::stod(record[i]);
                     break;
                 case CsvHeader::LATITUDE:
-                    data.setLatitude(record[i]);
+                    data.latitude = std::stod(record[i]);
                     break;
                 case CsvHeader::LONGITUDE:
-                    data.setLongitude(record[i]);
+                    data.longitude = std::stod(record[i]);
                     break;
                 case CsvHeader::ATTITUDE:
-                    data.setAttitude(record[i]);
+                    data.attitude = std::stod(record[i]);
                     break;
             }
             
@@ -215,5 +87,6 @@ namespace drider { namespace fd {
 
         return data;
     }
+    template class AbstrDataCsv<FinalDataLine>;
 
-}}
+}
