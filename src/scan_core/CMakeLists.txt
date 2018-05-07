@@ -63,6 +63,8 @@ include_directories(
 
 ## Add module DATA_RIDER ##############
 add_library(data_rider
+  include/data_rider/Velodynedata.cpp
+  include/data_rider/Sbgdata.cpp
  # include/data_rider/Lines.cpp
   include/data_rider/AbstrDataCsv.cpp
   include/data_rider/Finaldata.cpp

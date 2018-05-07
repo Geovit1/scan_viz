@@ -101,5 +101,7 @@ namespace drider {
     }
 
     template class AbstrDataCsv<FinalDataLine>;
+    template class AbstrDataCsv<SbgLine>;
+    template class AbstrDataCsv<VelodyneLine>;
 
 }
