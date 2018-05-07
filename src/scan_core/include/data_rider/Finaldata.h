@@ -49,7 +49,7 @@ namespace drider {
             //virtual FinalDataLine ReadCsvRaw();
 
             virtual FinalDataLine ParseCsvString(std::string raw);
-
+            virtual std::string MakeCsvString(FinalDataLine);
         private:
             //unsigned long int currnet_file_pos;
     };

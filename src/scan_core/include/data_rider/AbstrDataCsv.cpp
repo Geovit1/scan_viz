@@ -16,6 +16,7 @@ namespace drider {
     {
         m_file.close();
     }
+
     template<typename T>
     void AbstrDataCsv<T>::Open(std::string filepath)
     {
@@ -31,11 +32,13 @@ namespace drider {
 
         std::cout<<"File opened"<<std::endl;
     }
+
     template<typename T>
     void AbstrDataCsv<T>::Close()
     {
         m_file.close();
     }
+
     template<typename T>
     void AbstrDataCsv<T>::Reopen()
     {
@@ -45,10 +48,20 @@ namespace drider {
         std::string header;
         std::getline(m_file,header);
     }
+
     template<typename T>
     bool AbstrDataCsv<T>::isOpen()
     {
         if(m_file.is_open())
+        {
+            return true;
+        } else return false;
+    }
+
+    template<typename T>
+    bool AbstrDataCsv<T>::isEndFile()
+    {
+        if(m_file.eof())
         {
             return true;
         } else return false;
@@ -84,7 +97,7 @@ namespace drider {
     }
 
     template<typename T>
-   T AbstrDataCsv<T>::ReadCsvRaw()
+    T AbstrDataCsv<T>::ReadCsvRaw()
     {
         if(m_file.eof())
         {
@@ -98,6 +111,13 @@ namespace drider {
             raw=ParseCsvString(line);
         }
         return raw;
+    }
+
+
+    template<typename T>
+    void  AbstrDataCsv<T>::WriteCsvRaw(T a)
+    {
+        m_file << MakeCsvString(a) << std::endl;
     }
 
     template class AbstrDataCsv<FinalDataLine>;

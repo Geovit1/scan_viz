@@ -87,6 +87,8 @@ namespace drider {
 
         return data;
     }
-    template class AbstrDataCsv<FinalDataLine>;
+    
+
+    void MakeCsvString(FinalDataLine);
 
 }
