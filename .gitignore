@@ -3,6 +3,7 @@
 /el
 /el_isolated
 /build
+/src/scan_core/scan_core_files/data
 .*
 /.*
 !.gitignore

@@ -66,6 +66,7 @@ add_library(data_rider
  # include/data_rider/Lines.cpp
   include/data_rider/AbstrDataCsv.cpp
   include/data_rider/Finaldata.cpp
+  include/data_rider/dir_brouser/DirBrouser.cpp
 )
 
 target_link_libraries(data_rider

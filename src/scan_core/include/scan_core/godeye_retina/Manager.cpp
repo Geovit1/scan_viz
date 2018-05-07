@@ -5,7 +5,7 @@ namespace godeye_retina
 {
     Manager::Manager(ros::NodeHandle &n)
     {
-        std::string file = "/home/zf/catkin_ws/src/velodyne_gps/bagfiles/velodyne_sbg.csv";
+        std::string file = drider::DirBrouser::DataDirectory("velodyne_sbg.csv");
 
         sender = new Sender(n);
         generator = new GeneratorFinalData(file);
