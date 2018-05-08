@@ -17,11 +17,11 @@
 #include <boost/numeric/ublas/matrix_vector.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 
-#include "data_rider/Finaldata.h"
+#include "data_rider/csv/Finaldata.h"
 #include "mathmodel/CoordinateSystems.h"
 
 using namespace boost::numeric;
-using namespace drider;
+using namespace drider::csv;
 
 namespace godeye_retina
 {
@@ -48,7 +48,7 @@ namespace godeye_retina
 
     protected:
     private:
-        drider::Finaldata<FinalDataLine> m_csvdata;
+        drider::csv::Finaldata<FinalDataLine> m_csvdata;
         unsigned int m_bundle_size = 10000;
 
         ublas::vector<double> m_start_offset_xyz = ublas::vector<double>(3);

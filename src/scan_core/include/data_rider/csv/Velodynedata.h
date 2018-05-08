@@ -3,17 +3,20 @@
 #include <fstream> 
 #include <sstream>
 #include <vector>
-#include "data_rider/Lines.h"
-#include "data_rider/AbstrDataCsv.h"
+
+#include "data_rider/csv/AbstrDataCsv.h"
 
 
-namespace drider {
+namespace drider { namespace csv {
     
     template<typename T> class Velodynedata: public AbstrDataCsv<T>
     {
         public:
             
             virtual T ParseCsvString(std::string raw);
+            virtual std::string MakeCsvString(T);
+        private:
+            virtual void SetDefaultHeader();
     };
 
 
@@ -27,8 +30,10 @@ namespace drider {
 
             enum CsvHeader
             {
-                ROS_TIMESTAMP,
-                PACKET_STAMP,
+                ROS_TIMESTAMP_SEC,
+                ROS_TIMESTAMP_NSEC,
+                PACKET_STAMP_SEC,
+                PACKET_STAMP_NSEC,
                 LASER_ID,
                 GPS_TIME_TOH,
                 LERP_LASER_TIME,
@@ -44,12 +49,10 @@ namespace drider {
             //virtual FinalDataLine ReadCsvRaw();
 
             virtual VelodyneLine ParseCsvString(std::string raw);
-
+            virtual std::string MakeCsvString(VelodyneLine);
         private:
-            //unsigned long int currnet_file_pos;
-            char separator;
+            virtual void SetDefaultHeader();
     };
+   
 
-    
-
-}
+}}

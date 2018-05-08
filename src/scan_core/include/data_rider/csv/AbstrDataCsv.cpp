@@ -1,16 +1,28 @@
-#include "data_rider/AbstrDataCsv.h"
+#include "data_rider/csv/AbstrDataCsv.h"
 
-namespace drider {
+namespace drider { namespace csv {
 
-    /*template<typename T>
+
+    template<typename T>
     AbstrDataCsv<T>::AbstrDataCsv(std::string filepath)
+    {
+        Open(filepath);
+    }
+
+    template<typename T>
+    AbstrDataCsv<T>::AbstrDataCsv(std::string filepath, char separator)
     {
         m_filepath = filepath;
         m_file.open(m_filepath);
 
+        m_separator = separator;
+        Open(filepath);
+
         std::string header;
         std::getline(m_file,header);
-    }*/
+        setHeader(header);
+    }
+
     template<typename T>
     AbstrDataCsv<T>::~AbstrDataCsv()
     {
@@ -18,19 +30,49 @@ namespace drider {
     }
 
     template<typename T>
-    void AbstrDataCsv<T>::Open(std::string filepath)
+    bool AbstrDataCsv<T>::Open(std::string filepath)
     {
         m_filepath = filepath;
-        if(m_file.is_open())
+        if(m_file.is_open())//if it opened the other file - close
         {
             m_file.close();
         }
-        m_file.open(m_filepath);
 
-        std::string header;
-        std::getline(m_file,header);
+        m_file.open(m_filepath);//open new
+        if(m_file.is_open())
+        {
+            std::string header;
+            std::getline(m_file,header);
+            setHeader(header);
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+        
+    }
 
-        std::cout<<"File opened"<<std::endl;
+    template<typename T>
+    bool AbstrDataCsv<T>::Create(std::string filepath)
+    {
+        m_filepath = filepath;
+        if(m_file.is_open())//if it opened the other file - close
+        {
+            m_file.close();
+        }
+
+        m_file.open(m_filepath, std::fstream::in);//try open
+        if(m_file.is_open())
+        {
+            return false; // file exist
+        }
+        else 
+        {
+            m_file.open(m_filepath, std::fstream::in | std::fstream::out | std::fstream::app);
+            WriteHeader();
+            return true;
+        }
     }
 
     template<typename T>
@@ -72,7 +114,7 @@ namespace drider {
     {
         if(m_file.eof()){
             Reopen();
-            std::cout<<"end of file"<<std::endl;
+            std::cout<<"End of file reached"<<std::endl;
         }
 
         std::vector<T> list;
@@ -83,7 +125,7 @@ namespace drider {
                 if(m_file.eof())
                 {
                     Reopen();
-                    std::cout<<"end of file"<<std::endl;
+                    std::cout<<"End of file reached"<<std::endl;
                     break;
                 }
                 else {
@@ -120,8 +162,42 @@ namespace drider {
         m_file << MakeCsvString(a) << std::endl;
     }
 
+    template<typename T>
+    void  AbstrDataCsv<T>::WriteHeader()
+    {
+        m_file << GetHeaderString() << std::endl;
+    }
+
+    template<typename T>
+    void  AbstrDataCsv<T>::setHeader(std::string header)
+    {
+        std::istringstream ss( header );
+        m_header.clear();
+
+        while (ss)
+        {
+            std::string s;
+            if (!getline( ss, s, m_separator )) break;
+                m_header.push_back( s );
+        }
+    }
+
+    template<typename T>
+    std::string  AbstrDataCsv<T>::GetHeaderString()
+    {
+        std::string s_header = "";
+        for(int i=0; i < m_header.size() - 1 ; i++)
+        {
+            s_header += m_header[i] + m_separator;
+        }
+        s_header += m_header[ m_header.size() - 1 ];
+
+        return s_header;
+    }
+
+
     template class AbstrDataCsv<FinalDataLine>;
     template class AbstrDataCsv<SbgLine>;
     template class AbstrDataCsv<VelodyneLine>;
 
-}
+}}

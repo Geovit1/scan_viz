@@ -18,6 +18,10 @@ find_package(catkin REQUIRED COMPONENTS
             roslib
             dynamic_reconfigure
             message_generation
+            
+            message_runtime
+
+            #velodyne_msgs
             )
 
 find_package(OpenCV REQUIRED)
@@ -47,6 +51,9 @@ catkin_package(
 #  LIBRARIES scan_core
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
+  #CATKIN_DEPENDS ${${PROJECT_NAME}_CATKIN_DEPS}
+  #INCLUDE_DIRS include
+  #LIBRARIES velodyne_rawdata
 )
 
 ###########
@@ -58,21 +65,39 @@ catkin_package(
 include_directories(
   include 
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
+  ${GSTREAMER_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
+  ${YAML_CPP_LIBRARIES}
 )
+
+if(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
+add_definitions(-DHAVE_NEW_YAMLCPP)
+endif(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
+
 
 ## Add module DATA_RIDER ##############
 add_library(data_rider
-  include/data_rider/Velodynedata.cpp
-  include/data_rider/Sbgdata.cpp
- # include/data_rider/Lines.cpp
-  include/data_rider/AbstrDataCsv.cpp
-  include/data_rider/Finaldata.cpp
+  #csv sublib
+  include/data_rider/csv/Velodynedata.cpp
+  include/data_rider/csv/Sbgdata.cpp
+ #include/data_rider/csv/Lines.cpp
+  include/data_rider/csv/AbstrDataCsv.cpp
+  include/data_rider/csv/Finaldata.cpp
+
+  #dir brouser sublib
   include/data_rider/dir_brouser/DirBrouser.cpp
+
+  #velodyne sublib
+  include/data_rider/velodyne/VelodataConverter.cpp
+  include/data_rider/velodyne/ImuUnpacker.cpp
+  include/data_rider/velodyne/DataUnpacker.cpp
+  include/data_rider/velodyne/Calibrator.cpp
 )
 
 target_link_libraries(data_rider
   ${catkin_LIBRARIES}
+  ${YAML_CPP_LIBRARIES}
 )
 
 ## Add module MATH_MODEL ##############

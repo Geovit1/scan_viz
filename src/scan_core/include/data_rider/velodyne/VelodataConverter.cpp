@@ -1,13 +1,13 @@
-#include "velodyne/VelodataConverter.h"
+#include "data_rider/velodyne/VelodataConverter.h"
 #include <boost/foreach.hpp>
 #define foreach BOOST_FOREACH
 
-namespace velodyne
-{
-    VelodataConverter::VelodataConverter():
-            rawdata(new RawVelodata())
+namespace drider { namespace velodyne {
+
+    VelodataConverter::VelodataConverter(std::string calibration_file, std::string setting_file):
+            rawdata(new DataUnpacker())
     {
-            rawdata->setupFromFile(CALIBRATION32_FILE, SETTING_FILE);
+            rawdata->setupFromFile(calibration_file, setting_file);
     }
 
     void VelodataConverter::VeloPacketBag_To_CSV(std::string bagFile, std::string csvFile)
@@ -115,4 +115,5 @@ namespace velodyne
         }
         bag.close();
     }
-}
+    
+}}

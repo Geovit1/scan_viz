@@ -1,14 +1,10 @@
-#include "data_rider/Sbgdata.h"
+#include "data_rider/csv/Sbgdata.h"
 
-namespace drider {
+namespace drider { namespace csv {
   
-    Sbgdata<SbgLine>::Sbgdata(std::string filepath, char sep): AbstrDataCsv<SbgLine>()
+    Sbgdata<SbgLine>::Sbgdata(std::string filepath, char sep)
+                        : AbstrDataCsv<SbgLine>(filepath, sep)
     {
-        m_filepath = filepath;
-        m_file.open(m_filepath);
-        separator = sep;
-        std::string header;
-        std::getline(m_file,header);
     }
 
     Sbgdata<SbgLine>::~Sbgdata()
@@ -26,15 +22,18 @@ namespace drider {
         while (ss)
         {
             std::string s;
-            if (!getline( ss, s, separator)) break;
+            if (!getline( ss, s, m_separator)) break;
                 record.push_back( s );
         }
 
         for(int i=0; i<record.size(); i++){
             switch (i)
             {
-                case CsvHeader::ROS_TIMESTAMP:
-                    data.ros_timestamp = std::stoul(record[i]);
+                case CsvHeader::ROS_TIMESTAMP_SEC:
+                    data.ros_timestamp_sec = std::stoul(record[i]);
+                    break;
+                case CsvHeader::ROS_TIMESTAMP_NSEC:
+                    data.ros_timestamp_nsec = std::stoul(record[i]);
                     break;
                 case CsvHeader::YEAR:
                     data.year = std::stoi(record[i]);
@@ -111,4 +110,74 @@ namespace drider {
 
         return data;
     }
-}
+
+    std::string Sbgdata<SbgLine>::MakeCsvString(SbgLine data)
+    {
+        std::string s="";
+        s += std::to_string(data.ros_timestamp_sec) + m_separator;
+        s += std::to_string(data.ros_timestamp_nsec) + m_separator;
+        s += std::to_string(data.year) + m_separator; 
+        s += std::to_string(data.month) + m_separator;  
+        s += std::to_string(data.day) + m_separator; 
+        s += std::to_string(data.hour) + m_separator; 
+        s += std::to_string(data.minute) + m_separator; 
+        s += std::to_string(data.second) + m_separator; 
+
+        s += std::to_string(data.utc_nanosecond) + m_separator; 
+        s += std::to_string(data.gps_week) + m_separator;
+        s += std::to_string(data.clock_stable) + m_separator;
+        s += std::to_string(data.clock_status) + m_separator;
+        s += std::to_string(data.clock_utc_sync) + m_separator;
+        s += std::to_string(data.clock_utc_status) + m_separator;
+        
+        s += std::to_string(data.roll) + m_separator;
+        s += std::to_string(data.pitch) + m_separator;
+        s += std::to_string(data.yaw) + m_separator;
+        
+        s += std::to_string(data.north) + m_separator;
+        s += std::to_string(data.east) + m_separator;
+        s += std::to_string(data.down) + m_separator;
+        
+        s += std::to_string(data.latitude) + m_separator;
+        s += std::to_string(data.longitude) + m_separator;
+        s += std::to_string(data.attitude) + m_separator;
+        
+        s += std::to_string(data.undulation) + m_separator;
+        s += std::to_string(data.solution_mode) ;
+    }
+
+    void Sbgdata<SbgLine>::SetDefaultHeader()
+    {
+        m_header.clear();
+        m_header.push_back("ros_timestamp_sec");
+        m_header.push_back("ros_timestamp_nsec"); 
+        m_header.push_back("year");
+        m_header.push_back("month"); 
+        m_header.push_back("day");       
+        m_header.push_back("hour");       
+        m_header.push_back("second");
+        m_header.push_back("utc_nanosecond");       
+        m_header.push_back("gps_week");  
+
+        m_header.push_back("clock_stable"); 
+        m_header.push_back("clock_status");       
+        m_header.push_back("clock_utc_sync");
+        m_header.push_back("clock_utc_status");           
+        
+        m_header.push_back("roll");       
+        m_header.push_back("pitch");
+        m_header.push_back("yaw");           
+        
+        m_header.push_back("north");       
+        m_header.push_back("east");
+        m_header.push_back("down");
+
+        m_header.push_back("latitude");       
+        m_header.push_back("longitude");
+        m_header.push_back("attitude");
+
+        m_header.push_back("undulation");
+        m_header.push_back("solution_mode");
+    }
+
+}}
