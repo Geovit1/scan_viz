@@ -62,14 +62,16 @@ namespace drider { namespace csv {
             m_file.close();
         }
 
-        m_file.open(m_filepath, std::fstream::in);//try open
-        if(m_file.is_open())
+        std::ifstream ifile(m_filepath);//try open
+        if(ifile.is_open())
         {
+            ifile.close();
             return false; // file exist
         }
         else 
-        {
+        {   
             m_file.open(m_filepath, std::fstream::in | std::fstream::out | std::fstream::app);
+            SetDefaultHeader();
             WriteHeader();
             return true;
         }
@@ -110,14 +112,13 @@ namespace drider { namespace csv {
     }
 
     template<typename T>
-    std::vector<T> AbstrDataCsv<T>::ReadCsvPart(int raw_count)
+    int AbstrDataCsv<T>::ReadCsvPart(int raw_count, std::vector<T>& list)
     {
         if(m_file.eof()){
             Reopen();
             std::cout<<"End of file reached"<<std::endl;
         }
 
-        std::vector<T> list;
         if(m_file.is_open())
         {
             for(int i=0; i<raw_count; i++)
@@ -135,24 +136,26 @@ namespace drider { namespace csv {
                 }
             }
         }
-        return list;
+        return Status::CLOSED;
     }
 
     template<typename T>
-    T AbstrDataCsv<T>::ReadCsvRaw()
+    int AbstrDataCsv<T>::ReadCsvRaw(T &raw)
     {
-        if(m_file.eof())
-        {
-            Reopen();
-        }
-        T raw;
         if(m_file.is_open())
         {
             std::string line,f;
-            std::getline(m_file,line);
+            if(std::getline(m_file,line).eof())
+            {
+
+                    std::cout<<"End of file reached"<<std::endl;
+                    return AbstrDataCsv::Status::EOFILE;
+
+            }
             raw=ParseCsvString(line);
+            return Status::OPENED;            
         }
-        return raw;
+        return Status::CLOSED;
     }
 
 
@@ -199,5 +202,6 @@ namespace drider { namespace csv {
     template class AbstrDataCsv<FinalDataLine>;
     template class AbstrDataCsv<SbgLine>;
     template class AbstrDataCsv<VelodyneLine>;
+    template class AbstrDataCsv<TestDataLine>;
 
 }}

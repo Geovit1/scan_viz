@@ -87,6 +87,7 @@ namespace drider { namespace csv {
         s += std::to_string(data.z) + m_separator;
         s += std::to_string(data.distance) + m_separator;
         s += std::to_string(data.intensity) ;
+        return s;
     }
 
     void Velodynedata<VelodyneLine>::SetDefaultHeader()

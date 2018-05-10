@@ -33,8 +33,9 @@ namespace drider { namespace csv {
     {
         
             
-        uint ros_timestamp_sec;
-        uint ros_timestamp_nsec;
+        //uint ros_timestamp_sec;
+        //uint ros_timestamp_nsec;
+        std::string ros_timestamp;
         unsigned short int year;
         char month;
         char day;
@@ -110,6 +111,15 @@ namespace drider { namespace csv {
         double latitude;
         double longitude;
         double attitude;
+    };
+
+    struct TestDataLine
+    {   
+        uint timestamp;
+        char flag;
+        float x;
+        float y;
+        float z;
     };
     
 }}
