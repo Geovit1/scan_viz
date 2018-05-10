@@ -3,17 +3,19 @@
 #include <fstream> 
 #include <sstream>
 #include <vector>
-#include "data_rider/Lines.h"
-#include "data_rider/AbstrDataCsv.h"
 
+#include "data_rider/csv/AbstrDataCsv.h"
 
-namespace drider {
+namespace drider { namespace csv {
     
     template<typename T> class Finaldata: public AbstrDataCsv<T>
     {
         public:
             
             virtual T ParseCsvString(std::string raw);
+            virtual std::string MakeCsvString(T);
+        private:
+            virtual void SetDefaultHeader();
     };
 
 
@@ -44,16 +46,12 @@ namespace drider {
                 ATTITUDE
             };
 
-
-            //virtual std::vector<FinalDataLine> ReadCsv(int index, int raw_count);
-            //virtual FinalDataLine ReadCsvRaw();
-
             virtual FinalDataLine ParseCsvString(std::string raw);
-
+            virtual std::string MakeCsvString(FinalDataLine);
         private:
-            //unsigned long int currnet_file_pos;
+            virtual void SetDefaultHeader();
     };
 
     
 
-}
+}}

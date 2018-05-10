@@ -1,7 +1,7 @@
 #pragma once
 
-namespace drider 
-{
+namespace drider { namespace csv {
+
     
     struct FinalDataLine
     {    
@@ -33,7 +33,8 @@ namespace drider
     {
         
             
-        uint ros_timestamp;
+        uint ros_timestamp_sec;
+        uint ros_timestamp_nsec;
         unsigned short int year;
         char month;
         char day;
@@ -66,18 +67,21 @@ namespace drider
 
     struct VelodyneLine
     {       
-        uint ros_timestamp;
-        uint packet_stamp;
-        
+        uint ros_timestamp_sec;
+        uint ros_timestamp_nsec;
+
+        uint packet_stamp_sec;
+        uint packet_stamp_nsec;
+
         char laser_id ;
         uint gps_time_toh;
 
-        uint lerp_laser_time;
-        double x;
-        double y;
-        double z;
+        double lerp_laser_time;
+        float x;
+        float y;
+        float z;
             
-        double distance;
+        float distance;
         char intensity;
         
     };
@@ -107,4 +111,5 @@ namespace drider
         double longitude;
         double attitude;
     };
-}
+    
+}}

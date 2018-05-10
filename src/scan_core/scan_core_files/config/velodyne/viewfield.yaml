@@ -1,0 +1,7 @@
+%YAML:1.0
+image_width: 1280
+image_height: 720
+min_range: 0.05
+max_range: 100
+view_direction: 0
+view_width: 36000

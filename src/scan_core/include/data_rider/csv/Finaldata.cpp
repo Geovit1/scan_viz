@@ -1,14 +1,9 @@
-#include "data_rider/Finaldata.h"
+#include "data_rider/csv/Finaldata.h"
 
-namespace drider {
+namespace drider { namespace csv {
   
-    Finaldata<FinalDataLine>::Finaldata(std::string filepath): AbstrDataCsv<FinalDataLine>()
+    Finaldata<FinalDataLine>::Finaldata(std::string filepath): AbstrDataCsv<FinalDataLine>(filepath)
     {
-        m_filepath = filepath;
-        m_file.open(m_filepath);
-
-        std::string header;
-        std::getline(m_file,header);
     }
 
     Finaldata<FinalDataLine>::~Finaldata()
@@ -26,7 +21,7 @@ namespace drider {
         while (ss)
         {
             std::string s;
-            if (!getline( ss, s, ',' )) break;
+            if (!getline( ss, s, m_separator )) break;
                 record.push_back( s );
         }
 
@@ -87,6 +82,48 @@ namespace drider {
 
         return data;
     }
-    template class AbstrDataCsv<FinalDataLine>;
+    
 
-}
+    std::string Finaldata<FinalDataLine>::MakeCsvString(FinalDataLine data)
+    {
+        std::string s="";
+        s += std::to_string(data.laser_time) + m_separator;
+        s += std::to_string(data.laser_id) + m_separator;  
+        s += std::to_string(data.x) + m_separator; 
+        s += std::to_string(data.y) + m_separator; 
+        s += std::to_string(data.z) + m_separator; 
+        s += std::to_string(data.distance) + m_separator; 
+        s += std::to_string(data.intencity) + m_separator; 
+        s += std::to_string(data.roll) + m_separator;
+        s += std::to_string(data.pitch) + m_separator;
+        s += std::to_string(data.yaw) + m_separator;
+        s += std::to_string(data.north) + m_separator;
+        s += std::to_string(data.east) + m_separator;       
+        s += std::to_string(data.down) + m_separator;       
+        s += std::to_string(data.latitude) + m_separator;   
+        s += std::to_string(data.longitude) + m_separator;  
+        s += std::to_string(data.attitude) ; 
+    }
+
+    void Finaldata<FinalDataLine>::SetDefaultHeader()
+    {
+        m_header.clear();
+        m_header.push_back("lerp_laser_time");
+        m_header.push_back("laser_id");       
+        m_header.push_back("point_x");       
+        m_header.push_back("point_y");       
+        m_header.push_back("point_z");      
+        m_header.push_back("Distance");       
+        m_header.push_back("Intencity");        
+        m_header.push_back("Roll");      
+        m_header.push_back("Pitch");       
+        m_header.push_back("Yaw");        
+        m_header.push_back("N");        
+        m_header.push_back("E");       
+        m_header.push_back("D");       
+        m_header.push_back("Latitude");      
+        m_header.push_back("Longitude");      
+        m_header.push_back("Attitude");       
+    }
+
+}}
