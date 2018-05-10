@@ -78,6 +78,7 @@ endif(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
 
 ## Add module DATA_RIDER ##############
 add_library(data_rider
+  #include/data_rider/InterfaceDevice.h
   #csv sublib
   include/data_rider/csv/Velodynedata.cpp
   include/data_rider/csv/Sbgdata.cpp
