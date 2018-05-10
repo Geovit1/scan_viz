@@ -18,7 +18,7 @@ namespace drider {
         virtual void Open(std::string filepath);
         virtual void Close();
         virtual void Reopen();
-
+        
         virtual bool isOpen();
 
         virtual std::vector<T> ReadCsvPart(int raw_count);
@@ -28,7 +28,7 @@ namespace drider {
 
     protected:
         std::string m_filepath;
-        std::ifstream m_file;
+        std::fstream m_file;
         //unsigned long int currnet_file_pos;
     };
 
