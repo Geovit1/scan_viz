@@ -17,6 +17,14 @@ namespace drider {  namespace csv {
 
         virtual  ~AbstrDataCsv();
 
+        enum Status
+        {
+            OPENED,
+            CLOSED,
+            EOFILE,
+            ERROR
+        };
+
         virtual bool Open(std::string filepath);
         virtual bool Create(std::string filepath);
         virtual void Close();
@@ -25,8 +33,8 @@ namespace drider {  namespace csv {
         virtual bool isOpen();
         virtual bool isEndFile();
 
-        virtual std::vector<T> ReadCsvPart(int raw_count);
-        virtual T ReadCsvRaw();
+        virtual int ReadCsvPart(int raw_count, std::vector<T> &list);
+        virtual int ReadCsvRaw(T&);
 
         virtual void WriteCsvRaw(T);
 

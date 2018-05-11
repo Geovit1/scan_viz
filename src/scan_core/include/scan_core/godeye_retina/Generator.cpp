@@ -6,7 +6,8 @@ namespace godeye_retina
     {
         m_csvdata.Open(filepath);
 
-        FinalDataLine raw = m_csvdata.ReadCsvRaw();
+        FinalDataLine raw; 
+        m_csvdata.ReadCsvRaw(raw);
         m_start_offset_xyz = mathmodel::GeographicToGeocentric(raw.latitude, raw.longitude, raw.attitude);
         
         m_csvdata.Reopen();
@@ -15,7 +16,8 @@ namespace godeye_retina
     void GeneratorFinalData::NextData(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
                                         ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy)
     {
-        std::vector<FinalDataLine> list = m_csvdata.ReadCsvPart(m_bundle_size);
+        std::vector<FinalDataLine> list;
+        m_csvdata.ReadCsvPart(m_bundle_size, list);
         pos_xyz =(mathmodel::GeographicToGeocentric(list[0].latitude, list[0].longitude, list[0].attitude) - m_start_offset_xyz)/100;
         rpy[0] = list[0].roll;
         rpy[1] = list[0].pitch;

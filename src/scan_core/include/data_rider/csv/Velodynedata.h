@@ -30,10 +30,12 @@ namespace drider { namespace csv {
 
             enum CsvHeader
             {
-                ROS_TIMESTAMP_SEC,
+                /*ROS_TIMESTAMP_SEC,
                 ROS_TIMESTAMP_NSEC,
                 PACKET_STAMP_SEC,
-                PACKET_STAMP_NSEC,
+                PACKET_STAMP_NSEC,*/
+                ROS_TIMESTAMP,
+                PACKET_STAMP,
                 LASER_ID,
                 GPS_TIME_TOH,
                 LERP_LASER_TIME,

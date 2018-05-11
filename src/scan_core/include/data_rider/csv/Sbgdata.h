@@ -24,14 +24,13 @@ namespace drider { namespace csv {
     {
         public:
             Sbgdata(): AbstrDataCsv<SbgLine>() {}
-            Sbgdata(std::string filepath, char sep);
+            Sbgdata(std::string filepath, char separator);
             virtual  ~Sbgdata();
             //setSeparator(char sep);
 
             enum CsvHeader
             {
-                ROS_TIMESTAMP_SEC,
-                ROS_TIMESTAMP_NSEC,
+                ROS_TIMESTAMP,
                 YEAR,
                 MONTH,
                 DAY,

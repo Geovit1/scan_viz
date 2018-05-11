@@ -103,6 +103,7 @@ namespace drider { namespace csv {
         s += std::to_string(data.latitude) + m_separator;   
         s += std::to_string(data.longitude) + m_separator;  
         s += std::to_string(data.attitude) ; 
+        return s;
     }
 
     void Finaldata<FinalDataLine>::SetDefaultHeader()

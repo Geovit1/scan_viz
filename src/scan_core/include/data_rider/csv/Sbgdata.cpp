@@ -2,8 +2,8 @@
 
 namespace drider { namespace csv {
   
-    Sbgdata<SbgLine>::Sbgdata(std::string filepath, char sep)
-                        : AbstrDataCsv<SbgLine>(filepath, sep)
+    Sbgdata<SbgLine>::Sbgdata(std::string filepath, char separator)
+                        : AbstrDataCsv<SbgLine>(filepath, separator)
     {
     }
 
@@ -29,11 +29,14 @@ namespace drider { namespace csv {
         for(int i=0; i<record.size(); i++){
             switch (i)
             {
-                case CsvHeader::ROS_TIMESTAMP_SEC:
-                    data.ros_timestamp_sec = std::stoul(record[i]);
+                /*case CsvHeader::ROS_TIMESTAMP_SEC:
+                    data.ros_timestamp_sec = std::stoul(record[i].substr(0, record[i].find('/')));
                     break;
                 case CsvHeader::ROS_TIMESTAMP_NSEC:
-                    data.ros_timestamp_nsec = std::stoul(record[i]);
+                    data.ros_timestamp_nsec = std::stoul(record[i].sub);
+                    break;*/
+                case CsvHeader::ROS_TIMESTAMP:
+                    data.ros_timestamp = record[i];
                     break;
                 case CsvHeader::YEAR:
                     data.year = std::stoi(record[i]);
@@ -114,8 +117,9 @@ namespace drider { namespace csv {
     std::string Sbgdata<SbgLine>::MakeCsvString(SbgLine data)
     {
         std::string s="";
-        s += std::to_string(data.ros_timestamp_sec) + m_separator;
-        s += std::to_string(data.ros_timestamp_nsec) + m_separator;
+        //s += std::to_string(data.ros_timestamp_sec) + m_separator;
+        //s += std::to_string(data.ros_timestamp_nsec) + m_separator;
+        s += data.ros_timestamp + m_separator;
         s += std::to_string(data.year) + m_separator; 
         s += std::to_string(data.month) + m_separator;  
         s += std::to_string(data.day) + m_separator; 
@@ -144,6 +148,7 @@ namespace drider { namespace csv {
         
         s += std::to_string(data.undulation) + m_separator;
         s += std::to_string(data.solution_mode) ;
+        return s;
     }
 
     void Sbgdata<SbgLine>::SetDefaultHeader()

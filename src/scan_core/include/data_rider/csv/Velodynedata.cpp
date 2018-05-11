@@ -29,7 +29,7 @@ namespace drider { namespace csv {
         for(int i=0; i<record.size(); i++){
             switch (i)
             {
-                case CsvHeader::ROS_TIMESTAMP_SEC:
+                /*case CsvHeader::ROS_TIMESTAMP_SEC:
                     data.ros_timestamp_sec = std::stoul(record[i]);
                     break;
                 case CsvHeader::ROS_TIMESTAMP_NSEC:
@@ -40,6 +40,12 @@ namespace drider { namespace csv {
                     break;
                 case CsvHeader::PACKET_STAMP_NSEC:
                     data.packet_stamp_nsec = std::stoul(record[i]);
+                    break;*/
+                case CsvHeader::ROS_TIMESTAMP:
+                    data.ros_timestamp = record[i];
+                    break;
+                case CsvHeader::PACKET_STAMP:
+                    data.packet_stamp = record[i];
                     break;
                 case CsvHeader::LASER_ID:
                     data.laser_id = std::stoi(record[i]);
@@ -75,10 +81,12 @@ namespace drider { namespace csv {
     std::string Velodynedata<VelodyneLine>::MakeCsvString(VelodyneLine data)
     {
         std::string s="";
-        s += std::to_string(data.ros_timestamp_sec) + m_separator;
+        /*s += std::to_string(data.ros_timestamp_sec) + m_separator;
         s += std::to_string(data.ros_timestamp_nsec) + m_separator;
         s += std::to_string(data.packet_stamp_sec) + m_separator; 
-        s += std::to_string(data.packet_stamp_nsec) + m_separator;  
+        s += std::to_string(data.packet_stamp_nsec) + m_separator;*/
+        s += data.ros_timestamp + m_separator;
+        s += data.packet_stamp + m_separator;  
         s += std::to_string(data.laser_id) + m_separator; 
         s += std::to_string(data.gps_time_toh) + m_separator; 
         s += std::to_string(data.lerp_laser_time) + m_separator; 
@@ -87,6 +95,7 @@ namespace drider { namespace csv {
         s += std::to_string(data.z) + m_separator;
         s += std::to_string(data.distance) + m_separator;
         s += std::to_string(data.intensity) ;
+        return s;
     }
 
     void Velodynedata<VelodyneLine>::SetDefaultHeader()

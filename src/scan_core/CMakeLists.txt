@@ -63,6 +63,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
+  include ${catkin_INCLUDE_DIRS}
   include 
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
@@ -85,6 +86,7 @@ add_library(data_rider
  #include/data_rider/csv/Lines.cpp
   include/data_rider/csv/AbstrDataCsv.cpp
   include/data_rider/csv/Finaldata.cpp
+  include/data_rider/csv/Testdata.cpp
 
   #dir brouser sublib
   include/data_rider/dir_brouser/DirBrouser.cpp
@@ -139,7 +141,17 @@ target_link_libraries(retina godeye_retina mathmodel
 ## Install ##
 #############
 
-
+#install(DIRECTORY include/${PROJECT_NAME}/
+#        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 #############
 ## Testing ##
 #############
+
+
+add_executable(test_csv
+  src/test_csv.cpp
+)
+#add_dependencies(test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(test_csv data_rider
+  ${catkin_LIBRARIES}
+)
