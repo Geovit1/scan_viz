@@ -104,6 +104,7 @@ target_link_libraries(data_rider
 
 ## Add module MATH_MODEL ##############
 add_library(mathmodel
+  include/mathmodel/Rotations.cpp
   include/mathmodel/Interpolation.cpp
   include/mathmodel/CoordinateSystems.cpp
 )
