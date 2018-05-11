@@ -1,5 +1,6 @@
 #include "data_rider/csv/Testdata.h"
 #include "data_rider/csv/Sbgdata.h"
+#include "data_rider/csv/Velodynedata.h"
 #include "data_rider/dir_brouser/DirBrouser.h"
 #include <iostream>
 
@@ -8,7 +9,55 @@ using namespace drider::csv;
 using namespace drider;
 using namespace std;
 
+
 int main(int argc, char *arv[]) 
+{
+    Velodynedata<VelodyneLine> *tmp = new Velodynedata<VelodyneLine>(); 
+    vector<VelodyneLine> list;
+    //tmp->Create(DirBrouser::DataDirectory("velodyne_test.csv"));
+    VelodyneLine some;
+    some.ros_timestamp = "1523545635/628755331";
+    some.packet_stamp = "1523545635/578932762";
+    some.laser_id = 1;
+    some.gps_time_toh = 435611781;
+    some.lerp_laser_time = 435611781.071;
+    some.x = 1.000;
+    some.y = 1.000;
+    some.z = 1.000;
+    some.distance = 20.9;
+    some.intensity = 30;
+    tmp->WriteCsvRaw(some);
+    some.laser_id = 2;
+    tmp->WriteCsvRaw(some);
+    some.laser_id = 3;
+    tmp->WriteCsvRaw(some);
+
+    tmp->Open(DirBrouser::DataDirectory("velodyne.csv"));
+    
+    int flag;
+    //tmp->Reopen();
+    //std::cout << "wtf" << endl;
+    flag = tmp->ReadCsvPart(16000000, list);
+    int ix = 0;
+    for(auto it : list) 
+    {
+        /*cout << it.ros_timestamp << " " <<
+                it.packet_stamp << " " <<
+                (int)it.laser_id << " " <<
+                it.gps_time_toh << " " <<
+                it.lerp_laser_time << " " <<
+                it.x << " " <<
+                it.y << " " <<
+                it.z << " " <<
+                it.distance << " " <<
+                (int)it.intensity << endl;*/
+        ix++; 
+    }
+    cout << "Считано строчек: " << ix << endl;
+
+}
+
+/*int main(int argc, char *arv[]) 
 {
     Sbgdata<SbgLine> *tmp = new Sbgdata<SbgLine>();
     tmp->Open(DirBrouser::DataDirectory("sbg.csv"));
@@ -41,7 +90,7 @@ int main(int argc, char *arv[])
             (int)some.solution_mode << endl;
 
 
-}
+}*/
 
 /*int main(int argc, char *argv[])
 {

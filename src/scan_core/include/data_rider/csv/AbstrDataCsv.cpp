@@ -114,27 +114,29 @@ namespace drider { namespace csv {
     template<typename T>
     int AbstrDataCsv<T>::ReadCsvPart(int raw_count, std::vector<T>& list)
     {
+        std::string line;
         if(m_file.eof()){
-            Reopen();
+            //Reopen();
             std::cout<<"End of file reached"<<std::endl;
+            return Status::EOFILE;
         }
 
         if(m_file.is_open())
         {
             for(int i=0; i<raw_count; i++)
             {
-                if(m_file.eof())
+                if(std::getline(m_file, line).eof())
                 {
-                    Reopen();
+                    //Reopen();
                     std::cout<<"End of file reached"<<std::endl;
-                    break;
+                    return Status::EOFILE;
                 }
-                else {
-                    std::string line,f;
-                    std::getline(m_file,line);
+                else 
+                {
                     list.push_back(ParseCsvString(line));
-                }
+                } 
             }
+            return Status::OPENED;
         }
         return Status::CLOSED;
     }
@@ -144,12 +146,12 @@ namespace drider { namespace csv {
     {
         if(m_file.is_open())
         {
-            std::string line,f;
+            std::string line;
             if(std::getline(m_file,line).eof())
             {
 
                     std::cout<<"End of file reached"<<std::endl;
-                    return AbstrDataCsv::Status::EOFILE;
+                    return Status::EOFILE;
 
             }
             raw=ParseCsvString(line);

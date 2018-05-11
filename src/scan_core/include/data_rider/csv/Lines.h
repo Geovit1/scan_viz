@@ -68,11 +68,14 @@ namespace drider { namespace csv {
 
     struct VelodyneLine
     {       
-        uint ros_timestamp_sec;
-        uint ros_timestamp_nsec;
+        //uint ros_timestamp_sec;
+        //uint ros_timestamp_nsec;
 
-        uint packet_stamp_sec;
-        uint packet_stamp_nsec;
+        //uint packet_stamp_sec;
+        //uint packet_stamp_nsec;
+
+        std::string ros_timestamp;
+        std::string packet_stamp;
 
         char laser_id ;
         uint gps_time_toh;
