@@ -49,7 +49,7 @@ namespace mathmodel
 
     ublas::matrix<double> GenRotMat(double roll, double pitch, double yaw, std::string order="zyx") // order - sequence of rotations 
     {
-        //ublas::matrix<double> rot(3, 3), tmp(3, 3);
+        ublas::matrix<double> rot(3, 3), tmp(3, 3);
         /*if (order == "zyx") return GenRotMatZ(yaw)   * GenRotMatY(pitch) * GenRotMatX(roll);
         if (order == "xyz") return GenRotMatX(roll)  * GenRotMatY(pitch) * GenRotMatZ(yaw);
         if (order == "zxy") return GenRotMatZ(yaw)   * GenRotMatX(roll)  * GenRotMatY(pitch);
@@ -58,10 +58,10 @@ namespace mathmodel
         else                return GenRotMatY(pitch) * GenRotMatX(roll)  * GenRotMatZ(yaw);
         */
 
-        /*if (order == "zyx") 
+        if (order == "zyx") 
         {
-            ublas::axpy_prod(GenRotMatY(pitch), GenRotMatX(roll), tmp);
-            ublas::axpy_prod(GenRotMatZ(yaw), tmp , rot);
+            axpy_prod(GenRotMatY(pitch), GenRotMatX(roll), tmp);
+            ublas::axpy_prod(GenRotMatZ(yaw), tmp , rot, true);
             return rot;
         }
         if (order == "zyx") 
@@ -93,7 +93,7 @@ namespace mathmodel
             ublas::axpy_prod(GenRotMatY(pitch), GenRotMatX(roll), tmp);
             ublas::axpy_prod(GenRotMatZ(yaw), tmp , rot);
             return rot;
-        }*/
+        }
     }
 
     ublas::matrix<double> GenQuatRotMat(double w, double x, double y, double z) 
