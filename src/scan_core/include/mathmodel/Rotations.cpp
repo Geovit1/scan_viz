@@ -1,10 +1,12 @@
 #include "mathmodel/Rotations.h"
+#include <iostream>
 
+using namespace ublas;
 namespace mathmodel 
 {
-    ublas::matrix<double> GenRotMatX(double roll) 
+    matrix<double> GenRotMatX(double roll) 
     {
-        ublas::matrix<double> rot(3, 3);
+        matrix<double> rot(3, 3);
         rot(0, 0) = 1; 
         rot(0, 1) = 0; 
         rot(0, 2) = 0;
@@ -17,9 +19,9 @@ namespace mathmodel
         return rot;
     }
 
-    ublas::matrix<double> GenRotMatY(double pitch) 
+    matrix<double> GenRotMatY(double pitch) 
     {
-        ublas::matrix<double> rot(3, 3);
+        matrix<double> rot(3, 3);
         rot(0, 0) = cos(pitch);
         rot(0, 1) = 0;
         rot(0, 2) = sin(pitch);
@@ -32,9 +34,9 @@ namespace mathmodel
         return rot;
     }
 
-    ublas::matrix<double> GenRotMatZ(double yaw) 
+    matrix<double> GenRotMatZ(double yaw) 
     {
-        ublas::matrix<double> rot(3, 3);
+        matrix<double> rot(3, 3);
         rot(0, 0) = cos(yaw);
         rot(0, 1) = -sin(yaw);
         rot(0, 2) = 0;
@@ -47,9 +49,9 @@ namespace mathmodel
         return rot;
     }
 
-    ublas::matrix<double> GenRotMat(double roll, double pitch, double yaw, std::string order="zyx") // order - sequence of rotations 
+    matrix<double> GenRotMat(double roll, double pitch, double yaw, std::string order="zyx") // order - sequence of rotations 
     {
-        ublas::matrix<double> rot(3, 3), tmp(3, 3);
+        //ublas::matrix<double> rot(3, 3), tmp(3, 3);
         /*if (order == "zyx") return GenRotMatZ(yaw)   * GenRotMatY(pitch) * GenRotMatX(roll);
         if (order == "xyz") return GenRotMatX(roll)  * GenRotMatY(pitch) * GenRotMatZ(yaw);
         if (order == "zxy") return GenRotMatZ(yaw)   * GenRotMatX(roll)  * GenRotMatY(pitch);
@@ -58,47 +60,22 @@ namespace mathmodel
         else                return GenRotMatY(pitch) * GenRotMatX(roll)  * GenRotMatZ(yaw);
         */
 
-        if (order == "zyx") 
-        {
-            axpy_prod(GenRotMatY(pitch), GenRotMatX(roll), tmp);
-            ublas::axpy_prod(GenRotMatZ(yaw), tmp , rot, true);
-            return rot;
-        }
-        if (order == "zyx") 
-        {
-            ublas::axpy_prod(GenRotMatY(pitch), GenRotMatX(roll), tmp);
-            ublas::axpy_prod(GenRotMatZ(yaw), tmp , rot);
-            return rot;
-        }
-        if (order == "zyx") 
-        {
-            ublas::axpy_prod(GenRotMatY(pitch), GenRotMatX(roll), tmp);
-            ublas::axpy_prod(GenRotMatZ(yaw), tmp , rot);
-            return rot;
-        }
-        if (order == "zyx") 
-        {
-            ublas::axpy_prod(GenRotMatY(pitch), GenRotMatX(roll), tmp);
-            ublas::axpy_prod(GenRotMatZ(yaw), tmp , rot);
-            return rot;
-        }
-        if (order == "zyx") 
-        {
-            ublas::axpy_prod(GenRotMatY(pitch), GenRotMatX(roll), tmp);
-            ublas::axpy_prod(GenRotMatZ(yaw), tmp , rot);
-            return rot;
-        }
-        if (order == "zyx") 
-        {
-            ublas::axpy_prod(GenRotMatY(pitch), GenRotMatX(roll), tmp);
-            ublas::axpy_prod(GenRotMatZ(yaw), tmp , rot);
-            return rot;
-        }
+        if (order == "zyx") return prod(matrix<double>(prod(GenRotMatX(roll), GenRotMatY(pitch))), GenRotMatZ(yaw)); 
+        else 
+        if (order == "xyz") return prod(matrix<double>(prod(GenRotMatZ(yaw), GenRotMatY(pitch))), GenRotMatX(roll));
+        else 
+        if (order == "zxy") return prod(matrix<double>(prod(GenRotMatZ(yaw), GenRotMatX(roll))), GenRotMatY(pitch)); 
+        else 
+        if (order == "xzy") return prod(matrix<double>(prod(GenRotMatX(roll), GenRotMatZ(yaw))), GenRotMatY(pitch)); 
+        else
+        if (order == "yzx") return prod(matrix<double>(prod(GenRotMatY(pitch), GenRotMatZ(yaw))), GenRotMatX(roll)); 
+        else 
+                            return prod(matrix<double>(prod(GenRotMatY(pitch), GenRotMatX(roll))), GenRotMatZ(yaw));
     }
 
-    ublas::matrix<double> GenQuatRotMat(double w, double x, double y, double z) 
+    matrix<double> GenQuatRotMat(double w, double x, double y, double z) 
     {
-        ublas::matrix<double> rot(3, 3);
+        matrix<double> rot(3, 3);
         rot(0, 0) = 1 - 2 * y * y - 2 * z * z;
         rot(0, 1) = 2 * x * y - 2 * z * w;
         rot(0, 2) = 2 * x * z + 2 * y * w;
@@ -110,13 +87,13 @@ namespace mathmodel
         rot(2, 2) = 1 - 2 * x * x - 2 * y * y;
         return rot;
     }
-    ublas::matrix<double> GenCustomRotMat(double phi, ublas::vector<double> axis) 
+    matrix<double> GenCustomRotMat(double phi, ublas::vector<double> axis) 
     {   
         double x,y,z;
         x = axis[0];
         y = axis[1];
         z = axis[2];
-        ublas::matrix<double> rot(3, 3);
+        matrix<double> rot(3, 3);
         rot(0, 0) = cos(phi) + ((1 - cos(phi) * x * x));
         rot(0, 1) = ((1 - cos(phi)) * x * y) - (sin(phi) * z);
         rot(0, 2) = ((1 - cos(phi)) * x * z) + (sin(phi) * y);
