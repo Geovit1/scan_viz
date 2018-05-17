@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find godeye_skeleton)/launch/display.launch"/>
+    <node name="godeye_retina" pkg="scan_core" type="retina" output="screen"/>
+
+</launch>

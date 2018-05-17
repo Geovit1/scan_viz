@@ -28,7 +28,7 @@ namespace godeye_retina
     class AbstrGenerator
     {
     public:
-        virtual void NextData(pcl::PointCloud<pcl::PointXYZRGB> &cloud, ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy){}
+        virtual void NextData(pcl::PointCloud<pcl::PointXYZI> &cloud, ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy){}
         virtual void OnStartPosition(){}
         virtual void SetBundleSize(unsigned int bundle_size){}
     protected:
@@ -42,7 +42,7 @@ namespace godeye_retina
         GeneratorFinalData(std::string filepath);
         ~GeneratorFinalData();
 
-        virtual void NextData(pcl::PointCloud<pcl::PointXYZRGB> &cloud, ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy);
+        virtual void NextData(pcl::PointCloud<pcl::PointXYZI> &cloud, ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy);
         virtual void OnStartPosition();
         virtual void SetBundleSize(unsigned int bundle_size);
 

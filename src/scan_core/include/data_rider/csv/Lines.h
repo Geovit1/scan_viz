@@ -13,7 +13,7 @@ namespace drider { namespace csv {
         float z;
             
         float distance;
-        char intencity;
+        char intensity;
 
         float roll;
         float pitch;

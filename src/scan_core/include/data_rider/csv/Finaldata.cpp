@@ -47,7 +47,7 @@ namespace drider { namespace csv {
                     data.distance = std::stof(record[i]);
                     break;
                 case CsvHeader::INTENSITY:
-                    data.intencity = std::stoi(record[i]);
+                    data.intensity = std::stoi(record[i]);
                     break;
                 case CsvHeader::ROLL:
                     data.roll = std::stof(record[i]);
@@ -93,7 +93,7 @@ namespace drider { namespace csv {
         s += std::to_string(data.y) + m_separator; 
         s += std::to_string(data.z) + m_separator; 
         s += std::to_string(data.distance) + m_separator; 
-        s += std::to_string(data.intencity) + m_separator; 
+        s += std::to_string(data.intensity) + m_separator; 
         s += std::to_string(data.roll) + m_separator;
         s += std::to_string(data.pitch) + m_separator;
         s += std::to_string(data.yaw) + m_separator;
@@ -115,7 +115,7 @@ namespace drider { namespace csv {
         m_header.push_back("point_y");       
         m_header.push_back("point_z");      
         m_header.push_back("Distance");       
-        m_header.push_back("Intencity");        
+        m_header.push_back("Intensity");        
         m_header.push_back("Roll");      
         m_header.push_back("Pitch");       
         m_header.push_back("Yaw");        

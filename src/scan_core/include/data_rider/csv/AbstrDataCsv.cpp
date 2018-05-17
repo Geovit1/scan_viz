@@ -123,6 +123,7 @@ namespace drider { namespace csv {
 
         if(m_file.is_open())
         {
+            list.clear();
             for(int i=0; i<raw_count; i++)
             {
                 if(std::getline(m_file, line).eof())

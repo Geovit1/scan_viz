@@ -10,6 +10,7 @@ Panels:
         - /Odometry1/Shape1
         - /Odometry1/Covariance1/Position1
         - /Odometry1/Covariance1/Orientation1
+        - /Path1
       Splitter Ratio: 0.533333361
     Tree Height: 463
   - Class: rviz/Selection
@@ -230,6 +231,36 @@ Visualization Manager:
       Radius: 0.100000001
       Reference Frame: base_link
       Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: ""
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: ""
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Points
+      Topic: /point_cloud
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 232; 232; 232
@@ -255,25 +286,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 7.44244432
+      Distance: 13.0497694
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 5.27276468
-        Y: -6.53694248
-        Z: 2.79290605
+        X: 2.90078068
+        Y: -1.89702404
+        Z: 2.72719264
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.384797543
+      Pitch: 1.22479761
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.60906291
+      Yaw: 2.71406507
     Saved: ~
 Window Geometry:
   Displays:
@@ -291,5 +322,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1301
-  X: 65
-  Y: 24
+  X: 403
+  Y: 118

@@ -5,14 +5,14 @@ namespace godeye_retina
     Sender::Sender(ros::NodeHandle &n)
     {
         odom_pub = n.advertise<nav_msgs::Odometry>("odom", 50);
-        way_pub = n.advertise<nav_msgs::Path>("way", 50);
-        pointcloud_pub = n.advertise<pcl::PointCloud<pcl::PointXYZRGB>>("point_cloud", 40);
+        pathway_pub = n.advertise<nav_msgs::Path>("way", 50);
+        pointcloud_pub = n.advertise<pcl::PointCloud<pcl::PointXYZI>>("point_cloud", 40);
 
         m_current_time = ros::Time::now();
         m_last_time = ros::Time::now();
     }
 
-    void Sender::GetNextBundle(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+    void Sender::GetNextBundle(pcl::PointCloud<pcl::PointXYZI> &cloud,
                             ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy)
     {
         if(generator != nullptr)
@@ -22,7 +22,13 @@ namespace godeye_retina
         }
     }
 
-    void Sender::PublishBundle(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+
+    void Sender::ClearPathway()
+    {
+        pathway.poses.clear();
+    }
+
+    void Sender::PublishBundle(pcl::PointCloud<pcl::PointXYZI> &cloud,
                             ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy)
     {
        // ros::spinOnce();               // check for incoming messages
@@ -53,8 +59,7 @@ namespace godeye_retina
         odom_trans.transform.rotation = odom_quat;
 
 
-        nav_msgs::Path msg;
-        msg.header.frame_id = "odom";
+        pathway.header.frame_id = "odom";
         geometry_msgs::PoseStamped ps;
         ps.header.frame_id = "base_link";
 
@@ -64,10 +69,10 @@ namespace godeye_retina
         ps.pose.position.z = pos_xyz[2];
         ps.pose.orientation = odom_quat;
 
-        msg.poses.push_back(ps);
+        pathway.poses.push_back(ps);
 
         std::cout<<"way_pub.publish(m_msg)"<<std::endl;
-        way_pub.publish(msg);
+        pathway_pub.publish(pathway);
 
         //send the transform
         m_odom_broadcaster.sendTransform(odom_trans);

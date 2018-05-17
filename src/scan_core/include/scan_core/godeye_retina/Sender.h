@@ -28,21 +28,24 @@ namespace godeye_retina
         Sender(ros::NodeHandle &n);
         virtual ~Sender(){};
 
-        void GetNextBundle(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+        void GetNextBundle(pcl::PointCloud<pcl::PointXYZI> &cloud,
                             ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy);
 
-        void PublishBundle(pcl::PointCloud<pcl::PointXYZRGB> &cloud,
+        void PublishBundle(pcl::PointCloud<pcl::PointXYZI> &cloud,
                             ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy);
 
         AbstrGenerator *generator = nullptr;
 
         ros::Publisher odom_pub;
-        ros::Publisher way_pub;
+        ros::Publisher pathway_pub;
         ros::Publisher pointcloud_pub;
 
+        void ClearPathway();
     protected:
         ros::Time m_current_time, m_last_time;
         tf::TransformBroadcaster m_odom_broadcaster;
+                
+        nav_msgs::Path pathway;
     };
     
 }

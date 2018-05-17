@@ -12,7 +12,7 @@ using namespace godeye_retina;
 int main(int argc, char *argv[])
 {
 
-    std::cout<<"run"<<std::endl;
+    std::cout<<"RETINA RUNNING"<<std::endl<<std::endl;
 
     ros::init(argc, argv, "laser_scan_publisher");
     

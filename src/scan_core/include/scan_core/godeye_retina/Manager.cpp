@@ -14,7 +14,7 @@ namespace godeye_retina
 
         if(sender != nullptr){
             if(generator != nullptr){
-                std::cout<<"Builded"<<std::endl;
+                std::cout<<"RETINA Builded"<<std::endl<<std::endl;
             }
         }
 
@@ -31,7 +31,7 @@ namespace godeye_retina
         {
             ros::spinOnce();
 
-            pcl::PointCloud<pcl::PointXYZRGB> cloud;
+            pcl::PointCloud<pcl::PointXYZI> cloud;
             ublas::vector<double> pos_xyz = ublas::vector<double>(3);
             ublas::vector<double> rpy = ublas::vector<double>(3);
             sender->GetNextBundle(cloud, pos_xyz, rpy);
