@@ -27,10 +27,10 @@ namespace drider
         InterfaceDeviceData(){}
         virtual ~InterfaceDeviceData();
         
-        virtual void Convert_BagToCsv(std::string in_bagfile, std::string out_csvfile)=0;
-        virtual void Convert_BagToBin(std::string in_bagfile, std::string out_binfile)=0;
-        virtual void Convert_CsvToBin(std::string in_bagfile, std::string out_binfile)=0;
-        virtual void Convert_BinToCsv(std::string in_bagfile, std::string out_binfile)=0;
+        virtual static void Convert_BagToCsv(std::string in_bagfile, std::string out_csvfile)=0;
+        virtual static void Convert_BagToBin(std::string in_bagfile, std::string out_binfile)=0;
+        virtual static void Convert_CsvToBin(std::string in_bagfile, std::string out_binfile)=0;
+        virtual static void Convert_BinToCsv(std::string in_bagfile, std::string out_binfile)=0;
     protected:
         /* data */
     }
