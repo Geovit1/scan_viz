@@ -105,8 +105,12 @@ target_link_libraries(data_rider
 
 ## Add module MATH_MODEL ##############
 add_library(mathmodel
+  include/mathmodel/Matrices.cpp
+  include/mathmodel/Rotations.cpp
   include/mathmodel/Interpolation.cpp
   include/mathmodel/CoordinateSystems.cpp
+  include/mathmodel/TimeRefTypes.cpp
+  
 )
 
 target_link_libraries(mathmodel
@@ -131,6 +135,7 @@ add_executable(retina
   src/godeye_retina/retina.cpp
 )
 
+
 target_link_libraries(retina godeye_retina mathmodel
   ${catkin_LIBRARIES}
   ${Boost_INCLUDE_DIRS}
@@ -151,7 +156,15 @@ target_link_libraries(retina godeye_retina mathmodel
 add_executable(test_csv
   src/test_csv.cpp
 )
+
+add_executable(test_math
+  src/test_math.cpp
+)
+
 #add_dependencies(test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(test_csv data_rider
   ${catkin_LIBRARIES}
 )
+
+target_link_libraries(test_math data_rider mathmodel
+  ${catkin_LIBRARIES})
