@@ -64,13 +64,13 @@ namespace mathmodel
         else 
         if (order == "xyz") return prod(matrix<double>(prod(GenRotMatZ(yaw), GenRotMatY(pitch))), GenRotMatX(roll));
         else 
-        if (order == "zxy") return prod(matrix<double>(prod(GenRotMatZ(yaw), GenRotMatX(roll))), GenRotMatY(pitch)); 
+        if (order == "zxy") return prod(matrix<double>(prod(GenRotMatY(pitch), GenRotMatX(roll))), GenRotMatZ(yaw)); 
         else 
-        if (order == "xzy") return prod(matrix<double>(prod(GenRotMatX(roll), GenRotMatZ(yaw))), GenRotMatY(pitch)); 
+        if (order == "xzy") return prod(matrix<double>(prod(GenRotMatY(pitch), GenRotMatZ(yaw))), GenRotMatX(roll)); 
         else
-        if (order == "yzx") return prod(matrix<double>(prod(GenRotMatY(pitch), GenRotMatZ(yaw))), GenRotMatX(roll)); 
+        if (order == "yzx") return prod(matrix<double>(prod(GenRotMatX(roll), GenRotMatZ(yaw))), GenRotMatY(pitch)); 
         else 
-                            return prod(matrix<double>(prod(GenRotMatY(pitch), GenRotMatX(roll))), GenRotMatZ(yaw));
+                    /*yxz*/ return prod(matrix<double>(prod(GenRotMatZ(yaw), GenRotMatX(roll))), GenRotMatY(pitch)); 
     }
 
     matrix<double> GenQuatRotMat(double w, double x, double y, double z) 
