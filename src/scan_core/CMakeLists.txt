@@ -121,6 +121,7 @@ target_link_libraries(mathmodel
 ## Add module GODEYE_RETINA ##############
 # lib godeye_retina; executable retina
 add_library(godeye_retina
+  include/scan_core/godeye_retina/Pathway.cpp
   include/scan_core/godeye_retina/Sender.cpp
   include/scan_core/godeye_retina/Manager.cpp
   include/scan_core/godeye_retina/Generator.cpp

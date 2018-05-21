@@ -49,7 +49,7 @@ namespace godeye_retina
     protected:
     private:
         drider::csv::Finaldata<FinalDataLine> m_csvdata;
-        unsigned int m_bundle_size = 10000;
+        unsigned int m_bundle_size = 50000;
 
         ublas::vector<double> m_start_offset_xyz = ublas::vector<double>(3);
     };

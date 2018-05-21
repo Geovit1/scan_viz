@@ -10,7 +10,7 @@ namespace godeye_retina
     public:
         Manager(ros::NodeHandle &n);
         ~Manager();
-    
+        int count=0;
         void LifeCycle();
     private:
         Sender *sender;

@@ -44,8 +44,14 @@ namespace godeye_retina
     protected:
         ros::Time m_current_time, m_last_time;
         tf::TransformBroadcaster m_odom_broadcaster;
-                
-        nav_msgs::Path pathway;
+
+        std::string m_frameid_pathway = "odom";
+        std::string m_frameid_pointcloud_local = "base_link";
+        std::string m_frameid_pointcloud = "odom";
+        std::string m_frameid_odom = "odom";
+        std::string m_frameid_base = "base_link";
+
+        nav_msgs::Path m_pathway;
     };
     
 }

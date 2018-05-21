@@ -5,7 +5,7 @@ namespace godeye_retina
 {
     Manager::Manager(ros::NodeHandle &n)
     {
-        std::string file = drider::DirBrouser::DataDirectory("velodyne_sbg.csv");
+        std::string file = drider::DirBrouser::DataDirectory("velodyne_sbg_full.csv");//
 
         sender = new Sender(n);
         generator = new GeneratorFinalData(file);
@@ -29,18 +29,17 @@ namespace godeye_retina
 
         while(ros::ok())
         {
-            ros::spinOnce();
+            count++;
+            std::cout<<"next part "<<count<<":"<<std::endl;
 
+            ros::spinOnce();
             pcl::PointCloud<pcl::PointXYZI> cloud;
             ublas::vector<double> pos_xyz = ublas::vector<double>(3);
             ublas::vector<double> rpy = ublas::vector<double>(3);
             sender->GetNextBundle(cloud, pos_xyz, rpy);
-            std::cout<<pos_xyz[0]<<" "<<pos_xyz[1]<<" "<<pos_xyz[2]<<std::endl;
-            std::cout<<rpy[0]<<" "<<rpy[1]<<" "<<rpy[2]<<std::endl;
+                //std::cout<<pos_xyz[0]<<" "<<pos_xyz[1]<<" "<<pos_xyz[2]<<std::endl;
+                //std::cout<<rpy[0]<<" "<<rpy[1]<<" "<<rpy[2]<<std::endl;
             sender->PublishBundle(cloud, pos_xyz, rpy);
-            
-            std::string command;
-            std::cout<<"next"<<std::endl;
 
             ros::spinOnce();
             r.sleep();

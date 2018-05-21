@@ -25,6 +25,12 @@ namespace drider {  namespace csv {
             ERROR
         };
 
+        enum ExceptionType
+        {
+            PARSING,
+            READING
+        };
+
         virtual bool Open(std::string filepath);
         virtual bool Create(std::string filepath);
         virtual void Close();
@@ -53,6 +59,10 @@ namespace drider {  namespace csv {
         virtual void SetDefaultHeader() = 0;
         virtual std::string GetHeaderString();
         virtual void WriteHeader();
+
+        virtual void TerminalExeptionMsg(int e);
+
+        int m_linecount = 0;
     };
 
     

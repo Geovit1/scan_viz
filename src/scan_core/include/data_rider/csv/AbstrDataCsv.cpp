@@ -114,14 +114,30 @@ namespace drider { namespace csv {
     template<typename T>
     int AbstrDataCsv<T>::ReadCsvPart(int raw_count, std::vector<T>& list)
     {
-        std::string line;
+        int status=0;
         if(m_file.eof()){
             //Reopen();
             std::cout<<"End of file reached"<<std::endl;
             return Status::EOFILE;
         }
 
-        if(m_file.is_open())
+        list.clear(); 
+
+        for(int i=0; i<raw_count; i++)
+        {
+            T raw;
+            status = ReadCsvRaw(raw);
+
+            if(status == Status::OPENED)
+            {
+                list.push_back(raw);
+            }
+            else if(status == Status::EOFILE)
+                return status;
+        }
+        return status;
+
+       /* if(m_file.is_open())
         {
             list.clear();
             for(int i=0; i<raw_count; i++)
@@ -139,26 +155,53 @@ namespace drider { namespace csv {
             }
             return Status::OPENED;
         }
-        return Status::CLOSED;
+        return Status::CLOSED;*/
     }
 
     template<typename T>
     int AbstrDataCsv<T>::ReadCsvRaw(T &raw)
     {
-        if(m_file.is_open())
+        try
         {
-            std::string line;
-            if(std::getline(m_file,line).eof())
+            int ex =-1;
+
+            if(m_file.is_open())
             {
+                std::string line;
 
-                    std::cout<<"End of file reached"<<std::endl;
-                    return Status::EOFILE;
+                try
+                {
+                    if(std::getline(m_file,line).eof())
+                    {
+                        std::cout<<"End of file reached"<<std::endl;
+                        return Status::EOFILE;
 
+                    }
+                }
+                catch(...)
+                {
+                    ex = ExceptionType::READING;
+                }
+
+                try 
+                {
+                    raw=ParseCsvString(line);
+                }
+                catch(...)
+                {
+                    ex = ExceptionType::PARSING;
+                }
+
+                if(ex != -1) throw ex;
+                return Status::OPENED;            
             }
-            raw=ParseCsvString(line);
-            return Status::OPENED;            
+            return Status::CLOSED;
         }
-        return Status::CLOSED;
+        catch(int e)
+        {
+            TerminalExeptionMsg(e);
+            return Status::ERROR;
+        }
     }
 
 
@@ -201,6 +244,24 @@ namespace drider { namespace csv {
         return s_header;
     }
 
+    template<typename T>
+    void  AbstrDataCsv<T>::TerminalExeptionMsg(int e)
+    {
+        if(false)
+        {
+            switch(e)
+            {
+            case ExceptionType::PARSING:  
+                std::cout<<"ERROR! Parsing csv string exception!"<< std::endl;  
+                break;  
+            case ExceptionType::READING:  
+                std::cout<<"ERROR! Reading csv string exception!"<< std::endl;   
+                break;  
+            default:  
+                std::cout<<"W T FUUUUUUUUUUCK !!!"<< std::endl; 
+            }
+        }
+    }
 
     template class AbstrDataCsv<FinalDataLine>;
     template class AbstrDataCsv<SbgLine>;
