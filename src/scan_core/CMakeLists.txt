@@ -87,6 +87,7 @@ add_library(data_rider
   include/data_rider/csv/AbstrDataCsv.cpp
   include/data_rider/csv/Finaldata.cpp
   include/data_rider/csv/Testdata.cpp
+  include/data_rider/csv/PointTimeRef.cpp
 
   #dir brouser sublib
   include/data_rider/dir_brouser/DirBrouser.cpp
@@ -136,8 +137,16 @@ add_executable(retina
   src/godeye_retina/retina.cpp
 )
 
-
 target_link_libraries(retina godeye_retina mathmodel
+  ${catkin_LIBRARIES}
+  ${Boost_INCLUDE_DIRS}
+)
+
+add_executable(retina_trajectory 
+  src/godeye_retina/retina_trajectory.cpp
+)
+
+target_link_libraries(retina_trajectory godeye_retina mathmodel
   ${catkin_LIBRARIES}
   ${Boost_INCLUDE_DIRS}
 )

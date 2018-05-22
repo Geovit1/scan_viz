@@ -2,6 +2,11 @@
 
 namespace godeye_retina
 {
+
+    //////////////////////////////////////////////////////////
+    //GeneratorFinalData
+    //////////////////////////////////////////////////////////
+
     GeneratorFinalData::GeneratorFinalData(std::string filepath)
     {
         m_csvdata.Open(filepath);
@@ -51,5 +56,53 @@ namespace godeye_retina
     {
         m_bundle_size = bundle_size;
     }
+    //////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////
+    //GeneratorTrajectory
+    //////////////////////////////////////////////////////////
     
+    GeneratorTrajectory::GeneratorTrajectory(std::string filepath)
+    {
+        m_csvdata.Open(filepath);
+    }
+
+    void GeneratorTrajectory::NextData(pcl::PointCloud<pcl::PointXYZI> &cloud,
+                                        ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy)
+    {
+        PointTimeRefLine point;
+
+        int  status = m_csvdata.ReadCsvRaw(point);
+
+        if( status == PointTimeRef<PointTimeRefLine>::Status::OPENED)
+        {
+            pos_xyz[0] = (double)point.x;
+            pos_xyz[1] = (double)point.y;
+            pos_xyz[2] = (double)point.z; 
+            std::cout<<m_count<< " xyz:"<<pos_xyz[0] <<" "<<pos_xyz[1]<<" "<<pos_xyz[2]<<std::endl; 
+            m_count++;  
+        }
+        else{
+            pos_xyz[0] = 0;
+            pos_xyz[1] = 0;
+            pos_xyz[2] = 0;  
+        }
+        
+        if( status == PointTimeRef<PointTimeRefLine>::Status::EOFILE){
+            m_csvdata.Reopen();
+            m_count = 0;
+        }
+
+    }
+
+    void GeneratorTrajectory::OnStartPosition()
+    {
+        m_csvdata.Reopen();
+    }
+
+    void GeneratorTrajectory::SetBundleSize(unsigned int bundle_size)
+    {
+        m_bundle_size = bundle_size;
+    }
 }

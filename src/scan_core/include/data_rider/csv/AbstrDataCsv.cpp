@@ -267,5 +267,5 @@ namespace drider { namespace csv {
     template class AbstrDataCsv<SbgLine>;
     template class AbstrDataCsv<VelodyneLine>;
     template class AbstrDataCsv<TestDataLine>;
-
+    template class AbstrDataCsv<PointTimeRefLine>;
 }}

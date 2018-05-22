@@ -116,6 +116,14 @@ namespace drider { namespace csv {
         double attitude;
     };
 
+    struct PointTimeRefLine
+    {
+        uint time;
+        float x;
+        float y;
+        float z;
+    };
+
     struct TestDataLine
     {   
         uint timestamp;

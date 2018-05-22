@@ -18,6 +18,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 
 #include "data_rider/csv/Finaldata.h"
+#include "data_rider/csv/PointTimeRef.h"
 #include "mathmodel/CoordinateSystems.h"
 
 using namespace boost::numeric;
@@ -52,6 +53,23 @@ namespace godeye_retina
         unsigned int m_bundle_size = 50000;
 
         ublas::vector<double> m_start_offset_xyz = ublas::vector<double>(3);
+    };
+
+    class GeneratorTrajectory:public AbstrGenerator
+    {
+    public:
+        GeneratorTrajectory(std::string filepath);
+        ~GeneratorTrajectory();
+
+        virtual void NextData(pcl::PointCloud<pcl::PointXYZI> &cloud, ublas::vector<double> &pos_xyz, ublas::vector<double> &rpy);
+        virtual void OnStartPosition();
+        virtual void SetBundleSize(unsigned int bundle_size);
+
+    protected:
+    private:
+        drider::csv::PointTimeRef<PointTimeRefLine> m_csvdata;
+        unsigned int m_bundle_size = 1;
+        int m_count=0;
     };
 
 }
