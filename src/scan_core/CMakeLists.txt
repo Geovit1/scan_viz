@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
             roslib
             dynamic_reconfigure
             message_generation
-            
+            message_filters
             message_runtime
 
             #velodyne_msgs
@@ -63,7 +63,6 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-  include ${catkin_INCLUDE_DIRS}
   include 
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
@@ -79,7 +78,7 @@ endif(NOT ${YAML_CPP_VERSION} VERSION_LESS "0.5")
 
 ## Add module DATA_RIDER ##############
 add_library(data_rider
-  #include/data_rider/InterfaceDevice.h
+  include/data_rider/InterfaceDevice.h
   #csv sublib
   include/data_rider/csv/Velodynedata.cpp
   include/data_rider/csv/Sbgdata.cpp
@@ -97,6 +96,9 @@ add_library(data_rider
   include/data_rider/velodyne/ImuUnpacker.cpp
   include/data_rider/velodyne/DataUnpacker.cpp
   include/data_rider/velodyne/Calibrator.cpp
+
+  #sbg sublib
+  include/data_rider/sbg/SbgdataConverter.cpp
 )
 
 target_link_libraries(data_rider

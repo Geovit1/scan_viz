@@ -13,45 +13,60 @@ namespace drider { namespace velodyne {
     void VelodataConverter::VeloPacketBag_To_CSV(std::string bagFile, std::string csvFile)
     {   
         std::vector<VeloPacket> Velodyne_data_;
-        LoadVelopacketBag(Velodyne_data_, bagFile);
+        rosbag::Bag bag;
+        bag.open(bagFile, rosbag::bagmode::Read);
 
+        std::string pc_name = "/velodyne_packets";
+
+        std::vector<std::string> topics;
+        topics.push_back(pc_name);
+        
+        rosbag::View view(bag, rosbag::TopicQuery(topics));
+        
         std::ofstream fout;
         fout.open(csvFile, std::ios::out | std::ios::binary);
         fout << "ROS_Timestamp_velodyne,packet_stamp,laser_id,gps_time_toh,lerp_laser_time,point_x,point_y,point_z,distance,intensity" << '\n';
-        for(std::vector<VeloPacket>::size_type i = 0; i < Velodyne_data_.size(); i++)
+
+        foreach(rosbag::MessageInstance const m, view)
         {
-           
-            for(int j = 0; j < Velodyne_data_[i].pc_->packets.size(); j++) 
-            {
-
-                final_packet fpckt; 
-                rawdata->unpack32(Velodyne_data_[i].pc_->packets[j], fpckt);
-
-
-                for(int k = 0; k < fpckt.laser_id.size(); k++) 
+            velodyne_msgs::VelodyneScan::ConstPtr velopack = m.instantiate<velodyne_msgs::VelodyneScan>();
+            if (velopack != NULL) 
+            { 
+                for(int j = 0; j < velopack->packets.size(); j++) 
                 {
-                    std::ostringstream streamObj3;
-                    streamObj3 << std::fixed;
-                    streamObj3 << std::setprecision(3);
-                    streamObj3 << fpckt.lerp_laser_time[k];
-                    std::string lerp_laser_time = streamObj3.str();
 
-                    //printf("- %f \n ",fpckt.lerp_laser_time[k] );
-                    fout <<
-                    Velodyne_data_[i].pc_->header.stamp.sec << "/" << Velodyne_data_[i].pc_->header.stamp.nsec << "," <<
-                    fpckt.stamp_sec << "/" << fpckt.stamp_nsec << "," <<
-                    static_cast< int >(fpckt.laser_id[k]) << "," <<
-                    static_cast<uint>(fpckt.gps_time) << "," << 
-                    lerp_laser_time << "," << 
-                    fpckt.x[k] << "," <<
-                    fpckt.y[k] << "," <<
-                    fpckt.z[k] << "," <<
-                    fpckt.distance[k] << "," <<
-                    static_cast < int >(fpckt.intensity[k]) << "\n";
+                    final_packet fpckt; 
+                    rawdata->unpack32(velopack->packets[j], fpckt);
+
+
+                    for(int k = 0; k < fpckt.laser_id.size(); k++) 
+                    {
+                        std::ostringstream streamObj3;
+                        streamObj3 << std::fixed;
+                        streamObj3 << std::setprecision(3);
+                        streamObj3 << fpckt.lerp_laser_time[k];
+                        std::string lerp_laser_time = streamObj3.str();
+
+                        //printf("- %f \n ",fpckt.lerp_laser_time[k] );
+                        fout <<
+                        velopack->header.stamp.sec << "/" << velopack->header.stamp.nsec << "," <<
+                        fpckt.stamp_sec << "/" << fpckt.stamp_nsec << "," <<
+                        static_cast< int >(fpckt.laser_id[k]) << "," <<
+                        static_cast<uint>(fpckt.gps_time) << "," << 
+                        lerp_laser_time << "," << 
+                        fpckt.x[k] << "," <<
+                        fpckt.y[k] << "," <<
+                        fpckt.z[k] << "," <<
+                        fpckt.distance[k] << "," <<
+                        static_cast < int >(fpckt.intensity[k]) << "\n";
+                    }
                 }
             }
+            
         }
+        bag.close();
         fout.close();
+
     }
 
     void VelodataConverter::VeloPacket_To_PCL2(std::vector<VeloPacket> &velodata, int ind, pcl::PointCloud<pcl::PointXYZI>  &out_cloud)
@@ -117,3 +132,113 @@ namespace drider { namespace velodyne {
     }
     
 }}
+
+/*
+
+
+    void VelodataConverter::VeloPacketBag_To_CSV(std::string bagFile, std::string csvFile)
+    {   
+        std::vector<VeloPacket> Velodyne_data_;
+        LoadVelopacketBag(Velodyne_data_, bagFile);
+
+        std::ofstream fout;
+        fout.open(csvFile, std::ios::out | std::ios::binary);
+        fout << "ROS_Timestamp_velodyne,packet_stamp,laser_id,gps_time_toh,lerp_laser_time,point_x,point_y,point_z,distance,intensity" << '\n';
+        for(std::vector<VeloPacket>::size_type i = 0; i < Velodyne_data_.size(); i++)
+        {
+           
+            for(int j = 0; j < Velodyne_data_[i].pc_->packets.size(); j++) 
+            {
+
+                final_packet fpckt; 
+                rawdata->unpack32(Velodyne_data_[i].pc_->packets[j], fpckt);
+
+
+                for(int k = 0; k < fpckt.laser_id.size(); k++) 
+                {
+                    std::ostringstream streamObj3;
+                    streamObj3 << std::fixed;
+                    streamObj3 << std::setprecision(3);
+                    streamObj3 << fpckt.lerp_laser_time[k];
+                    std::string lerp_laser_time = streamObj3.str();
+
+                    //printf("- %f \n ",fpckt.lerp_laser_time[k] );
+                    fout <<
+                    Velodyne_data_[i].pc_->header.stamp.sec << "/" << Velodyne_data_[i].pc_->header.stamp.nsec << "," <<
+                    fpckt.stamp_sec << "/" << fpckt.stamp_nsec << "," <<
+                    static_cast< int >(fpckt.laser_id[k]) << "," <<
+                    static_cast<uint>(fpckt.gps_time) << "," << 
+                    lerp_laser_time << "," << 
+                    fpckt.x[k] << "," <<
+                    fpckt.y[k] << "," <<
+                    fpckt.z[k] << "," <<
+                    fpckt.distance[k] << "," <<
+                    static_cast < int >(fpckt.intensity[k]) << "\n";
+                }
+            }
+        }
+        fout.close();
+    }
+
+
+void VelodataConverter::VeloPacketBag_To_CSV(std::string bagFile, std::string csvFile)
+    {   
+        std::vector<VeloPacket> Velodyne_data_;
+        rosbag::Bag bag;
+        bag.open(bagFile, rosbag::bagmode::Read);
+
+        std::string pc_name = "/velodyne_packets";
+
+        std::vector<std::string> topics;
+        topics.push_back(pc_name);
+        
+        rosbag::View view(bag, rosbag::TopicQuery(topics));
+        
+        std::ofstream fout;
+        fout.open(csvFile, std::ios::out | std::ios::binary);
+        fout << "ROS_Timestamp_velodyne,packet_stamp,laser_id,gps_time_toh,lerp_laser_time,point_x,point_y,point_z,distance,intensity" << '\n';
+
+        foreach(rosbag::MessageInstance const m, view)
+        {
+            velodyne_msgs::VelodyneScan::ConstPtr velopack = m.instantiate<velodyne_msgs::VelodyneScan>();
+            if (velopack != NULL) 
+            { 
+                for(int j = 0; j < velopack->packets.size(); j++) 
+                {
+
+                    final_packet fpckt; 
+                    rawdata->unpack32(velopack->packets[j], fpckt);
+
+
+                    for(int k = 0; k < fpckt.laser_id.size(); k++) 
+                    {
+                        std::ostringstream streamObj3;
+                        streamObj3 << std::fixed;
+                        streamObj3 << std::setprecision(3);
+                        streamObj3 << fpckt.lerp_laser_time[k];
+                        std::string lerp_laser_time = streamObj3.str();
+
+                        //printf("- %f \n ",fpckt.lerp_laser_time[k] );
+                        fout <<
+                        velopack->header.stamp.sec << "/" << velopack->header.stamp.nsec << "," <<
+                        fpckt.stamp_sec << "/" << fpckt.stamp_nsec << "," <<
+                        static_cast< int >(fpckt.laser_id[k]) << "," <<
+                        static_cast<uint>(fpckt.gps_time) << "," << 
+                        lerp_laser_time << "," << 
+                        fpckt.x[k] << "," <<
+                        fpckt.y[k] << "," <<
+                        fpckt.z[k] << "," <<
+                        fpckt.distance[k] << "," <<
+                        static_cast < int >(fpckt.intensity[k]) << "\n";
+                    }
+                }
+            }
+            
+        }
+        bag.close();
+        fout.close();
+
+    }
+
+
+*/

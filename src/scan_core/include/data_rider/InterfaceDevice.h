@@ -6,7 +6,7 @@ namespace drider
     {
     public:
         InterfaceDevice(){}
-        virtual ~InterfaceDevice();
+        virtual ~InterfaceDevice()=0;
     protected:
         /* data */
     };
@@ -14,12 +14,12 @@ namespace drider
     class InterfaceDeviceCamera: public InterfaceDevice
     {
     public:
-        InterfaceDeviceData(){}
-        virtual ~InterfaceDeviceData();
+        InterfaceDeviceCamera(){}
+        virtual ~InterfaceDeviceCamera()=0;
         
     protected:
         /* data */
-    }
+    };
 
     class InterfaceDeviceData: public InterfaceDevice
     {
@@ -27,44 +27,44 @@ namespace drider
         InterfaceDeviceData(){}
         virtual ~InterfaceDeviceData();
         
-        virtual static void Convert_BagToCsv(std::string in_bagfile, std::string out_csvfile)=0;
-        virtual static void Convert_BagToBin(std::string in_bagfile, std::string out_binfile)=0;
-        virtual static void Convert_CsvToBin(std::string in_bagfile, std::string out_binfile)=0;
-        virtual static void Convert_BinToCsv(std::string in_bagfile, std::string out_binfile)=0;
+        virtual void Convert_BagToCsv(std::string in_bagfile, std::string out_csvfile)=0;
+        virtual void Convert_BagToBin(std::string in_bagfile, std::string out_binfile)=0;
+        virtual void Convert_CsvToBin(std::string in_bagfile, std::string out_binfile)=0;
+        virtual void Convert_BinToCsv(std::string in_bagfile, std::string out_binfile)=0;
     protected:
         /* data */
-    }
+    };
 
     class InterfaceDeviceImu: public InterfaceDeviceData
     {
     public:
-        InterfaceDeviceData(){}
-        virtual ~InterfaceDeviceData();
+        InterfaceDeviceImu(){}
+        virtual ~InterfaceDeviceImu();
         
     protected:
-    }
+    };
     
     class InterfaceDeviceLidar: public InterfaceDeviceData
     {
     public:
-        InterfaceDeviceData(){}
-        virtual ~InterfaceDeviceData();
+        InterfaceDeviceLidar(){}
+        virtual ~InterfaceDeviceLidar();
         
     protected:
         /* data */
-    }
+    };
 
     class InterfaceDeviceGPS: public InterfaceDeviceData
     {
     public:
-        InterfaceDeviceData(){}
-        virtual ~InterfaceDeviceData();
+        InterfaceDeviceGPS(){}
+        virtual ~InterfaceDeviceGPS();
         
-        virtual void Trajectory_BagToKml(std::string in_bagfile, std::string out_binfile)=0;
-        virtual void Trajectory_CsvToKml(std::string in_bagfile, std::string out_binfile)=0;
-        virtual void Trajectory_BinToKml(std::string in_bagfile, std::string out_binfile)=0;
+        virtual void Convert_BagToTrajectory(std::string in_bagfile)=0;
+        virtual void Convert_CsvToTrajectory(std::string in_csvfile)=0;
+        virtual void Convert_BinToTrajectory(std::string in_binfile)=0;
     protected:
         /* data */
-    }
+    };
 
 }

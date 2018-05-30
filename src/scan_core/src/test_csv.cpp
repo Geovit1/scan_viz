@@ -2,6 +2,7 @@
 #include "data_rider/csv/Sbgdata.h"
 #include "data_rider/csv/Velodynedata.h"
 #include "data_rider/dir_brouser/DirBrouser.h"
+#include "data_rider/velodyne/VelodataConverter.h"
 #include <iostream>
 
 
@@ -10,9 +11,20 @@ using namespace drider;
 using namespace std;
 
 
-int main(int argc, char *arv[]) 
+int main(int argc, char *argv[]) 
 {
-    Velodynedata<VelodyneLine> *tmp = new Velodynedata<VelodyneLine>(); 
+    ros::init(argc, argv, "velodyne_bag2csv");
+
+    std::string in, out;
+    ros::param::param<std::string>("~bag", in, "");
+    ros::param::param<std::string>("~csv", out, "");
+
+    velodyne::VelodataConverter *vc = new velodyne::VelodataConverter(DirBrouser::ConfigDirectory("velodyne/32db.yaml"),DirBrouser::ConfigDirectory("velodyne/viewfield.yaml"));
+    vc->VeloPacketBag_To_CSV(DirBrouser::DataDirectory(in), DirBrouser::DataDirectory(out));
+    
+    return 0;
+
+    /*Velodynedata<VelodyneLine> *tmp = new Velodynedata<VelodyneLine>(); 
     vector<VelodyneLine> list;
     //tmp->Create(DirBrouser::DataDirectory("velodyne_test.csv"));
     VelodyneLine some;
@@ -41,7 +53,7 @@ int main(int argc, char *arv[])
     int ix = 0;
     for(auto it : list) 
     {
-        /*cout << it.ros_timestamp << " " <<
+        cout << it.ros_timestamp << " " <<
                 it.packet_stamp << " " <<
                 (int)it.laser_id << " " <<
                 it.gps_time_toh << " " <<
@@ -50,10 +62,10 @@ int main(int argc, char *arv[])
                 it.y << " " <<
                 it.z << " " <<
                 it.distance << " " <<
-                (int)it.intensity << endl;*/
+                (int)it.intensity << endl;
         ix++; 
     }
-    cout << "Считано строчек: " << ix << endl;
+    cout << "Считано строчек: " << ix << endl;*/
 
 }
 
