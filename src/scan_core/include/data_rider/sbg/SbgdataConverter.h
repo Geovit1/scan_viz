@@ -13,39 +13,38 @@
 
 #include <string>
 
-#include <sbg_driver/SbgEkfEuler.h>
-#include <sbg_driver/SbgEkfNav.h>
-#include <sbg_driver/SbgEkfStatus.h>
-#include <sbg_driver/SbgEvent.h>
-#include <sbg_driver/SbgGpsHdt.h>
-#include <sbg_driver/SbgGpsPos.h>
-#include <sbg_driver/SbgGpsPosStatus.h>
-#include <sbg_driver/SbgGpsRaw.h>
-#include <sbg_driver/SbgGpsVel.h>
-#include <sbg_driver/SbgGpsVelStatus.h>
-#include <sbg_driver/SbgImuData.h>
-#include <sbg_driver/SbgImuStatus.h>
-#include <sbg_driver/SbgMag.h>
-#include <sbg_driver/SbgMagCalib.h>
-#include <sbg_driver/SbgMagStatus.h>
-#include <sbg_driver/SbgOdoVel.h>
-#include <sbg_driver/SbgPressure.h>
-#include <sbg_driver/SbgShipMotion.h>
-#include <sbg_driver/SbgShipMotionStatus.h>
-#include <sbg_driver/SbgStatus.h>
-#include <sbg_driver/SbgStatusAiding.h>
-#include <sbg_driver/SbgStatusCom.h>
-#include <sbg_driver/SbgStatusGeneral.h>
-#include <sbg_driver/SbgUtcTime.h>
-#include <sbg_driver/SbgUtcTimeStatus.h>
-#include <velodyne_gps/HDL32eOver.h>
+#include "data_rider/sbg/sbgheaders/SbgEkfEuler.h"
+#include "data_rider/sbg/sbgheaders/SbgEkfNav.h"
+#include "data_rider/sbg/sbgheaders/SbgEkfStatus.h"
+#include "data_rider/sbg/sbgheaders/SbgEvent.h"
+#include "data_rider/sbg/sbgheaders/SbgGpsHdt.h"
+#include "data_rider/sbg/sbgheaders/SbgGpsPos.h"
+#include "data_rider/sbg/sbgheaders/SbgGpsPosStatus.h"
+#include "data_rider/sbg/sbgheaders/SbgGpsRaw.h"
+#include "data_rider/sbg/sbgheaders/SbgGpsVel.h"
+#include "data_rider/sbg/sbgheaders/SbgGpsVelStatus.h"
+#include "data_rider/sbg/sbgheaders/SbgImuData.h"
+#include "data_rider/sbg/sbgheaders/SbgImuStatus.h"
+#include "data_rider/sbg/sbgheaders/SbgMag.h"
+#include "data_rider/sbg/sbgheaders/SbgMagCalib.h"
+#include "data_rider/sbg/sbgheaders/SbgMagStatus.h"
+#include "data_rider/sbg/sbgheaders/SbgOdoVel.h"
+#include "data_rider/sbg/sbgheaders/SbgPressure.h"
+#include "data_rider/sbg/sbgheaders/SbgShipMotion.h"
+#include "data_rider/sbg/sbgheaders/SbgShipMotionStatus.h"
+#include "data_rider/sbg/sbgheaders/SbgStatus.h"
+#include "data_rider/sbg/sbgheaders/SbgStatusAiding.h"
+#include "data_rider/sbg/sbgheaders/SbgStatusCom.h"
+#include "data_rider/sbg/sbgheaders/SbgStatusGeneral.h"
+#include "data_rider/sbg/sbgheaders/SbgUtcTime.h"
+#include "data_rider/sbg/sbgheaders/SbgUtcTimeStatus.h"
 
 
 #include "data_rider/InterfaceDevice.h"
 
 namespace drider { namespace sbg {
     
-    class SBG
+    class SBGPacket
     {
     public:
       sbg_driver::SbgEkfEuler::ConstPtr ekfEuler_;
@@ -53,7 +52,7 @@ namespace drider { namespace sbg {
       sbg_driver::SbgUtcTime::ConstPtr utc_;
 
   
-      SBG(const sbg_driver::SbgEkfEuler::ConstPtr &ekfEuler, 
+      SBGPacket(const sbg_driver::SbgEkfEuler::ConstPtr &ekfEuler, 
                   const sbg_driver::SbgEkfNav::ConstPtr &ekfNav, 
                   const sbg_driver::SbgUtcTime::ConstPtr &utc) :
         ekfEuler_(ekfEuler),
@@ -62,28 +61,24 @@ namespace drider { namespace sbg {
       {}
     };
 
-    void callback(const sbg_driver::SbgEkfEuler::ConstPtr &ekfEuler, 
-              const sbg_driver::SbgEkfNav::ConstPtr &ekfNav, 
-              const sbg_driver::SbgUtcTime::ConstPtr &utc)
-    {
-        SBG sbg(ekfEuler, ekfNav, utc);
-
-        // Stereo dataset is class variable to store data
-        SBG_data_.push_back(sbg);
-    }
-
     class SbgdataConverter: InterfaceDeviceImu, InterfaceDeviceGPS
     {
     public:
-        SbgdataConverter(std::string calibration_file, std::string setting_file);
+        SbgdataConverter();
         ~SbgdataConverter(){};
         
-        virtual void Convert_BagToCsv(std::string in_bagfile){};
-        virtual void Convert_BagToBin(std::string in_bagfile){};
-        virtual void Convert_CsvToBin(std::string in_bagfile){};
-        virtual void Convert_BinToCsv(std::string in_bagfile){};
+        virtual void Convert_BagToCsv(std::string in_bagfile, std::string out_csvfile);
+        virtual void Convert_BagToBin(std::string in_bagfile, std::string out_binfile){};
+        virtual void Convert_CsvToBin(std::string in_csvfile, std::string out_binfile){};
+        virtual void Convert_BinToCsv(std::string in_binfile, std::string out_csvfile){};
+
+        void LoadFulldataBag(std::vector<SBGPacket> &SBGPacket, std::string bagfile);
+        
     private:
-        DataUnpacker *rawdata;
+        std::string SBG_ns_ = "/sync";
+        std::string ekfEuler_name = SBG_ns_ + "/ekf_euler";
+        std::string ekfNav_name = SBG_ns_ + "/ekf_nav";
+        std::string utc_name = SBG_ns_ + "/utc_time";
     };
 
 }}

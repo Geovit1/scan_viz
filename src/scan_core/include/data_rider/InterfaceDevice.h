@@ -25,7 +25,7 @@ namespace drider
     {
     public:
         InterfaceDeviceData(){}
-        virtual ~InterfaceDeviceData();
+        virtual ~InterfaceDeviceData()=0;
         
         virtual void Convert_BagToCsv(std::string in_bagfile, std::string out_csvfile)=0;
         virtual void Convert_BagToBin(std::string in_bagfile, std::string out_binfile)=0;
@@ -39,7 +39,7 @@ namespace drider
     {
     public:
         InterfaceDeviceImu(){}
-        virtual ~InterfaceDeviceImu();
+        virtual ~InterfaceDeviceImu()=0;
         
     protected:
     };
@@ -48,7 +48,7 @@ namespace drider
     {
     public:
         InterfaceDeviceLidar(){}
-        virtual ~InterfaceDeviceLidar();
+        virtual ~InterfaceDeviceLidar()=0;
         
     protected:
         /* data */
@@ -58,7 +58,7 @@ namespace drider
     {
     public:
         InterfaceDeviceGPS(){}
-        virtual ~InterfaceDeviceGPS();
+        virtual ~InterfaceDeviceGPS()=0;
         
         virtual void Convert_BagToTrajectory(std::string in_bagfile)=0;
         virtual void Convert_CsvToTrajectory(std::string in_csvfile)=0;

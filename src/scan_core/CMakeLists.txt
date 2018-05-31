@@ -169,6 +169,10 @@ add_executable(test_csv
   src/test_csv.cpp
 )
 
+add_executable(test_sbgcsv
+  src/test_sbgcsv.cpp
+)
+
 add_executable(test_math
   src/test_math.cpp
 )
@@ -178,5 +182,10 @@ target_link_libraries(test_csv data_rider
   ${catkin_LIBRARIES}
 )
 
+target_link_libraries(test_sbgcsv data_rider
+  ${catkin_LIBRARIES}
+)
+
 target_link_libraries(test_math data_rider mathmodel
-  ${catkin_LIBRARIES})
+  ${catkin_LIBRARIES}
+  )
