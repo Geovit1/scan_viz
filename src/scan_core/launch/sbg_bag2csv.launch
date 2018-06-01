@@ -1,0 +1,14 @@
+<launch>
+
+	<arg name="bag" default="velodyne_sbg03.bag" />
+	<arg name="csv" default="sbg_test.csv" />
+	
+
+
+	<node name="sbg_bag2csv" pkg="scan_core" type="test_sbgcsv" output="screen">
+		<param name="bag" value="$(arg bag)" />
+		<param name="csv" value="$(arg csv)" />
+	</node>
+
+
+</launch>

@@ -30,7 +30,8 @@ namespace drider { namespace csv {
 
             enum CsvHeader
             {
-                ROS_TIMESTAMP,
+                ROS_TIMESTAMP_SEC,
+                ROS_TIMESTAMP_NSEC,
                 YEAR,
                 MONTH,
                 DAY,

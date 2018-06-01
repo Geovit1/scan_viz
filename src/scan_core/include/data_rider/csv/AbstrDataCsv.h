@@ -2,7 +2,11 @@
 #include <iostream>
 #include <fstream> 
 #include <sstream>
+#include <string>
 #include <vector>
+#include <stdio.h>
+#include <limits>
+#include <iomanip>
 #include "data_rider/csv/Lines.h"
 
 namespace drider {  namespace csv {

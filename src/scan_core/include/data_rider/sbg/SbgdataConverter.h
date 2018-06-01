@@ -41,6 +41,7 @@
 
 
 #include "data_rider/InterfaceDevice.h"
+#include "data_rider/csv/Sbgdata.h"
 
 namespace drider { namespace sbg {
     
@@ -61,7 +62,7 @@ namespace drider { namespace sbg {
       {}
     };
 
-    class SbgdataConverter: InterfaceDeviceImu, InterfaceDeviceGPS
+    class SbgdataConverter: virtual InterfaceDeviceImu, InterfaceDeviceGPS
     {
     public:
         SbgdataConverter();
@@ -71,6 +72,10 @@ namespace drider { namespace sbg {
         virtual void Convert_BagToBin(std::string in_bagfile, std::string out_binfile){};
         virtual void Convert_CsvToBin(std::string in_csvfile, std::string out_binfile){};
         virtual void Convert_BinToCsv(std::string in_binfile, std::string out_csvfile){};
+
+        virtual void Convert_BagToTrajectory(std::string in_bagfile){};
+        virtual void Convert_CsvToTrajectory(std::string in_csvfile){};
+        virtual void Convert_BinToTrajectory(std::string in_binfile){};
 
         void LoadFulldataBag(std::vector<SBGPacket> &SBGPacket, std::string bagfile);
         

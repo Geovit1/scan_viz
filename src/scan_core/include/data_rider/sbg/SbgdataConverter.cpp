@@ -8,7 +8,49 @@ namespace drider { namespace sbg {
 
     void SbgdataConverter::Convert_BagToCsv(std::string in_bagfile, std::string out_csvfile)
     {
+        std::vector<SBGPacket> sbgdata;
+        std::cout<<"Load"<<std::endl;
+        LoadFulldataBag(sbgdata, in_bagfile);
 
+        csv::Sbgdata<csv::SbgLine> csvdata;
+        csvdata.Create(out_csvfile);
+        csv::SbgLine tmp_line;
+        std::cout<<"Writing"<<std::endl;
+        for(int i=0; i<sbgdata.size(); i++)
+        {
+            tmp_line.ros_timestamp_sec = sbgdata[i].utc_->header.stamp.sec ;
+            tmp_line.ros_timestamp_nsec =  sbgdata[i].utc_->header.stamp.nsec ;
+            tmp_line.year = sbgdata[i].utc_->year;
+            tmp_line.month = sbgdata[i].utc_->month;
+            tmp_line.day = sbgdata[i].utc_->day;
+            tmp_line.hour = sbgdata[i].utc_->hour;
+            tmp_line.minute = sbgdata[i].utc_->min;
+            tmp_line.second = sbgdata[i].utc_->sec;
+
+            tmp_line.utc_nanosecond = sbgdata[i].utc_->nanosec;
+            tmp_line.gps_week = sbgdata[i].utc_->gps_tow;
+            tmp_line.clock_stable = sbgdata[i].utc_->clock_status.clock_stable;
+            tmp_line.clock_status = sbgdata[i].utc_->clock_status.clock_status;
+            tmp_line.clock_utc_sync = sbgdata[i].utc_->clock_status.clock_utc_sync;
+            tmp_line.clock_utc_status = sbgdata[i].utc_->clock_status.clock_utc_status;
+            
+            tmp_line.roll = sbgdata[i].ekfEuler_->angle.x;
+            tmp_line.pitch = sbgdata[i].ekfEuler_->angle.y;
+            tmp_line.yaw = sbgdata[i].ekfEuler_->angle.z;
+
+            tmp_line.north = sbgdata[i].ekfNav_->velocity.x;
+            tmp_line.east = sbgdata[i].ekfNav_->velocity.y;
+            tmp_line.down = sbgdata[i].ekfNav_->velocity.z;
+
+            tmp_line.latitude = sbgdata[i].ekfNav_->position.x;
+            tmp_line.longitude = sbgdata[i].ekfNav_->position.y;
+            tmp_line.attitude = sbgdata[i].ekfNav_->position.z;
+
+            tmp_line.undulation = sbgdata[i].ekfNav_->undulation ;
+            tmp_line.solution_mode = sbgdata[i].ekfEuler_->status.solution_mode;
+            csvdata.WriteCsvRaw(tmp_line);
+        }
+        csvdata.Close();
     }
 
     void SbgdataConverter::LoadFulldataBag(std::vector<SBGPacket> &sbgdata, std::string bagfile)

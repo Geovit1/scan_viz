@@ -33,9 +33,9 @@ namespace drider { namespace csv {
     {
         
             
-        //uint ros_timestamp_sec;
-        //uint ros_timestamp_nsec;
-        std::string ros_timestamp;
+        uint ros_timestamp_sec;
+        uint ros_timestamp_nsec;
+        
         unsigned short int year;
         char month;
         char day;

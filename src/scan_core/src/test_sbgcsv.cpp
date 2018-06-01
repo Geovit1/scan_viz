@@ -1,19 +1,21 @@
+#include "data_rider/sbg/SbgdataConverter.h"
+#include "data_rider/dir_brouser/DirBrouser.h"
 
-
-
+using namespace drider;
 
 
 int main(int argc, char *argv[]) 
 {
-   /* ros::init(argc, argv, "velodyne_bag2csv");
+    ros::init(argc, argv, "sbg_bag2csv");
 
     std::string in, out;
     ros::param::param<std::string>("~bag", in, "");
     ros::param::param<std::string>("~csv", out, "");
 
-    sbg::SbgdataConverter *vc = new sbg::SbgdataConverter(DirBrouser::ConfigDirectory("velodyne/32db.yaml"),DirBrouser::ConfigDirectory("velodyne/viewfield.yaml"));
-    vc->VeloPacketBag_To_CSV(DirBrouser::DataDirectory(in), DirBrouser::DataDirectory(out));*/
-    
+    std::cout<<"Run"<<std::endl;
+    sbg::SbgdataConverter *sbg = new sbg::SbgdataConverter();
+    sbg->Convert_BagToCsv(DirBrouser::DataDirectory(in), DirBrouser::DataDirectory(out));
+    std::cout<<"End"<<std::endl;    
     return 0;
 
     /*Velodynedata<VelodyneLine> *tmp = new Velodynedata<VelodyneLine>(); 

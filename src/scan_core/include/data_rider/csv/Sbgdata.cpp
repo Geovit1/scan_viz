@@ -29,15 +29,15 @@ namespace drider { namespace csv {
         for(int i=0; i<record.size(); i++){
             switch (i)
             {
-                /*case CsvHeader::ROS_TIMESTAMP_SEC:
-                    data.ros_timestamp_sec = std::stoul(record[i].substr(0, record[i].find('/')));
+                case CsvHeader::ROS_TIMESTAMP_SEC:
+                    data.ros_timestamp_sec = std::stoi(record[i]);
                     break;
                 case CsvHeader::ROS_TIMESTAMP_NSEC:
-                    data.ros_timestamp_nsec = std::stoul(record[i].sub);
-                    break;*/
-                case CsvHeader::ROS_TIMESTAMP:
-                    data.ros_timestamp = record[i];
+                    data.ros_timestamp_nsec = std::stoi(record[i]);
                     break;
+                /*case CsvHeader::ROS_TIMESTAMP:
+                    data.ros_timestamp = record[i];
+                    break;*/
                 case CsvHeader::YEAR:
                     data.year = std::stoi(record[i]);
                     break;
@@ -117,9 +117,9 @@ namespace drider { namespace csv {
     std::string Sbgdata<SbgLine>::MakeCsvString(SbgLine data)
     {
         std::string s="";
-        //s += std::to_string(data.ros_timestamp_sec) + m_separator;
-        //s += std::to_string(data.ros_timestamp_nsec) + m_separator;
-        s += data.ros_timestamp + m_separator;
+        s += std::to_string(data.ros_timestamp_sec) + m_separator;
+        s += std::to_string(data.ros_timestamp_nsec) + m_separator;
+        //s += data.ros_timestamp + m_separator;
         s += std::to_string(data.year) + m_separator; 
         s += std::to_string(data.month) + m_separator;  
         s += std::to_string(data.day) + m_separator; 
@@ -129,22 +129,39 @@ namespace drider { namespace csv {
 
         s += std::to_string(data.utc_nanosecond) + m_separator; 
         s += std::to_string(data.gps_week) + m_separator;
+        
         s += std::to_string(data.clock_stable) + m_separator;
         s += std::to_string(data.clock_status) + m_separator;
         s += std::to_string(data.clock_utc_sync) + m_separator;
         s += std::to_string(data.clock_utc_status) + m_separator;
         
-        s += std::to_string(data.roll) + m_separator;
-        s += std::to_string(data.pitch) + m_separator;
-        s += std::to_string(data.yaw) + m_separator;
+        std::ostringstream posx,posy,posz, velx, vely, velz, anglex, angley, anglez ;
+        posx << std::fixed;
+        posx << std::setprecision(10);
+        posx << data.roll;;
+
+        std::ostringstream r,p,y, veln, vele, veld, la, lo, at ;
+        r << std::fixed; r<< std::setprecision(10); r << data.roll;
+        p << std::fixed << std::setprecision(10) << data.pitch;
+        y << std::fixed << std::setprecision(10) << data.yaw;
+        veln << std::fixed << std::setprecision(10) << data.north;
+        vele << std::fixed << std::setprecision(10) << data.east;
+        veld << std::fixed << std::setprecision(10) << data.down;
+        la << std::fixed << std::setprecision(10) << data.latitude;
+        lo << std::fixed << std::setprecision(10) << data.longitude;
+        at << std::fixed << std::setprecision(10) << data.attitude;
+
+        s += r.str() + m_separator;
+        s += p.str() + m_separator;
+        s += y.str() + m_separator;
         
-        s += std::to_string(data.north) + m_separator;
-        s += std::to_string(data.east) + m_separator;
-        s += std::to_string(data.down) + m_separator;
+        s += veln.str() + m_separator;
+        s += vele.str() + m_separator;
+        s += veld.str() + m_separator;
         
-        s += std::to_string(data.latitude) + m_separator;
-        s += std::to_string(data.longitude) + m_separator;
-        s += std::to_string(data.attitude) + m_separator;
+        s += la.str() + m_separator;
+        s += lo.str() + m_separator;
+        s += at.str() + m_separator;
         
         s += std::to_string(data.undulation) + m_separator;
         s += std::to_string(data.solution_mode) ;
@@ -156,11 +173,14 @@ namespace drider { namespace csv {
         m_header.clear();
         m_header.push_back("ros_timestamp_sec");
         m_header.push_back("ros_timestamp_nsec"); 
+
         m_header.push_back("year");
         m_header.push_back("month"); 
         m_header.push_back("day");       
-        m_header.push_back("hour");       
+        m_header.push_back("hour");
+        m_header.push_back("minute");        
         m_header.push_back("second");
+
         m_header.push_back("utc_nanosecond");       
         m_header.push_back("gps_week");  
 
